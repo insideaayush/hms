@@ -39,8 +39,8 @@ WEBPACK_LOADER = {
 MEDIAFILES_LOCATION = 'media'
 STATICFILES_LOCATION = 'static'
 
-DEFAULT_FILE_STORAGE = 'gene_proflie.config.S3utils.MediaStorage' 
-STATICFILES_STORAGE = 'gene_proflie.config.S3utils.StaticStorage' 
+DEFAULT_FILE_STORAGE = 'gene_profile.config.S3utils.MediaStorage' 
+STATICFILES_STORAGE = 'gene_profile.config.S3utils.StaticStorage' 
 
 AWS_STORAGE_BUCKET_NAME = 'gene-profile-s3'
 AWS_S3_REGION_NAME = 'ap-south-1'  # e.g. us-east-2
