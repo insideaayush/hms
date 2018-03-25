@@ -1,4 +1,4 @@
-from gene_proflie.settings.common import *
+from gene_profile.settings.common import *
 import os 
 
 # SECURITY WARNING: keep the secret key used in production secret!
