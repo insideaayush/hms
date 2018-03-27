@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
 import Card, {CardHeader, CardActions, CardContent, CardMedia } from 'material-ui/Card';
 
 const styles = theme => ({

@@ -33,6 +33,7 @@ urlpatterns = [
         'rest_framework.urls', namespace='rest_framework')),
     path('api/auth/token/obtain/', TokenObtainPairView.as_view()),
     path('api/auth/token/refresh/', TokenRefreshView.as_view()),
+    path('froala_editor/', include('froala_editor.urls')),
     path('admin/', admin.site.urls),
     re_path(r'^.*$', generic.TemplateView.as_view(template_name="index.html")),
 ]

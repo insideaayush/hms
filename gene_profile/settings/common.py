@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 INSTALLED_APPS = [
     'storages',
+    'froala_editor',
     'rest_framework',
     'v1.apps.V1Config',
     'django.contrib.admin',
@@ -109,3 +110,11 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
+
+FROALA_EDITOR_PLUGINS = ('align', 'char_counter', 'code_beautifier',
+                         'code_view', 'colors', 'draggable', 'emoticons',
+                         'entities', 'file', 'font_family', 'font_size',
+                         'fullscreen', 'image_manager', 'image',
+                         'inline_style', 'line_breaker', 'link', 'lists',
+                         'paragraph_format', 'paragraph_style', 'quick_insert',
+                         'quote', 'save', 'table', 'url', 'video')
