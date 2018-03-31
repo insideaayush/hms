@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import auth, * as fromAuth from './auth'
+import posts, * as fromPosts from './posts'
 
 export default combineReducers({
     auth: auth,
+    posts: posts,
     router: routerReducer,
 })
 
@@ -25,6 +27,13 @@ export const getUser =
 export const getUserId =
     state => fromAuth.getUserId(state.auth)
 
+// Posts Helper Function
+
+export const getPostList = 
+    state => fromPosts.allPosts(state.posts)
+
+export const isRetrievingPostList = 
+    state => fromPosts.isRetrievingPostList(state.posts)
 
 export function withAuth(headers = {}) {
     return (state) => ({

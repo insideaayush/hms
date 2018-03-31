@@ -20,6 +20,7 @@ const styles = theme => ({
     }
 });
 
+// TODO: ove this out of this component
 const sidebarItems = {
     primary: [
         {
@@ -47,7 +48,7 @@ const sidebarItems = {
 
 }
 
-function SimpleList(props) {
+function DrawerList(props) {
     const { classes } = props;
     const primaryList  = sidebarItems.primary.map((item, index) => {
         return (
@@ -102,8 +103,8 @@ function SimpleList(props) {
     );
 }
 
-SimpleList.propTypes = {
+DrawerList.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SimpleList);
+export default withStyles(styles)(DrawerList);

@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux'
+import { Route } from 'react-router'
 import { withStyles } from 'material-ui/styles';
+
+// actionCreaters and Reducers
+import {getUserId, getUser, isAuthenticated} from './reducers'
+import {getLoggedInUser} from './actions/auth'
+
+// Components
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -9,15 +16,7 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import MenuIcon from 'material-ui-icons/Menu';
-
-import {getUserId, getUser, isAuthenticated} from './reducers'
-import {getLoggedInUser} from './actions/auth'
-
-// In-App Routing
-import { Route } from 'react-router'
-import SideBarItems from './components/SideBarItems'
-import Home from './containers/Home'
-import BlogDetail from './containers/BlogDetail'
+import DrawerList from './components/DrawerList'
 
 const drawerWidth = 240;
 
@@ -64,20 +63,12 @@ const routes = [
     {
         path: "/",
         exact: true,
-        sidebar: () => <div>home!</div>,
-        main: () => <Home />,
         title: () => <span> Home</span>,
-    },
-    {
-        path: "/detail",
-        exact: true,
-        sidebar: () => <div>home!</div>,
-        main: () => <BlogDetail />,
-        title: () => <span> Home</span>,
+        main: () => <div>Home</div>,
     },
 ];
 
-class ResponsiveDrawer extends React.Component {
+class App extends React.Component {
     state = {
         mobileOpen: false,
     };
@@ -99,12 +90,12 @@ class ResponsiveDrawer extends React.Component {
                 <div className={classes.drawerHeader}>
                     <Toolbar>
                         <Typography variant="title" color="inherit" noWrap>
-                            The Country Store
+                            Direct Healthcare
                         </Typography>
                     </Toolbar>
                 </div>
                 <Divider />
-                <SideBarItems handleLogout={this.props.handleLogout.bind(this)} />             
+                <DrawerList handleLogout={this.props.handleLogout.bind(this)} />             
             </div>
         );
 
@@ -171,7 +162,7 @@ class ResponsiveDrawer extends React.Component {
     }
 }
 
-ResponsiveDrawer.propTypes = {
+App.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
 };
@@ -193,4 +184,4 @@ const mapDispatchToProps = (dispatch) => ({
     }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(ResponsiveDrawer));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(App));

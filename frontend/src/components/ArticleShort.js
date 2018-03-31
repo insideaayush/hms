@@ -14,7 +14,7 @@ const styles = {
     },
 };
 
-function SimpleMediaCard(props) {
+function ArticleShort(props) {
     const { classes } = props;
     return (
         <div>
@@ -27,28 +27,28 @@ function SimpleMediaCard(props) {
                 <CardContent>
                     <Typography variant="headline" component="h2">
                         Lizard
-          </Typography>
+                    </Typography>
                     <Typography component="p">
                         Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                         across all continents except Antarctica
-          </Typography>
+                     </Typography>
                 </CardContent>
                 <CardActions>
                     <Button size="small" color="primary">
                         Share
-                </Button>
+                    </Button>
                     <Button size="small" color="primary">
                         Learn More
-          </Button>
+                    </Button>
                 </CardActions>
             </Card>
         </div>
     );
 }
 
-SimpleMediaCard.propTypes = {
+ArticleShort.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SimpleMediaCard);
+export default withStyles(styles)(ArticleShort);
 
