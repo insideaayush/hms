@@ -6,8 +6,9 @@ from v1.models import *
 class UserSerializer(QueryFieldsMixin, serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'id', 'username', 'first_name', 'last_name')
-
+        fields = ('url', 'id', 'username', 'first_name', 'last_name', 'email')
+"""
+# Serializer for blog part
 class TagSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Tag
@@ -40,3 +41,5 @@ class PostSerializer(QueryFieldsMixin, serializers.ModelSerializer):
             'created_on',
             'publish_on'
         )
+"""
+
