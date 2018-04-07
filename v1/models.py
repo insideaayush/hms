@@ -157,6 +157,9 @@ class Patient(models.Model):
     joined_on = models.DateTimeField(auto_now_add=True)
     last_updated_on = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ('last_updated_on',)
+
     def __str__(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
 
@@ -166,6 +169,9 @@ class Clinic(models.Model):
     address = models.TextField(blank=True, default=None, null=True)
     joined_on = models.DateTimeField(auto_now_add=True)
     last_updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('last_updated_on', )
 
     def __str__(self):
         return "%s" % (self.user.first_name)
@@ -179,6 +185,8 @@ class Doctor(models.Model):
     joined_on = models.DateTimeField(auto_now_add=True)
     last_updated_on = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ('last_updated_on', )
 
     def __str__(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
@@ -205,6 +213,10 @@ class Appointment(models.Model):
     status = models.CharField(max_length=100, choices=ALL_APPOINTMENT_STATUSES, default="Requested")
     created_on = models.DateTimeField(auto_now_add=True)
     last_updated_on = models.DateTimeField(auto_now=True)
+    appointment_time = models.DateTimeField(null=True, default=None, blank=True)
+
+    class Meta:
+        ordering = ('last_updated_on', )
 
     def __str__(self):
         return self.booking_id
@@ -221,6 +233,9 @@ class Subscription(models.Model):
     active = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
     last_updated_on = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ('last_updated_on', )
 
     def __str__(self):
         _str  = self.kind.kind if (self.kind != None) else 'No info on subscription'
