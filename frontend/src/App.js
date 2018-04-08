@@ -16,7 +16,8 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import MenuIcon from 'material-ui-icons/Menu';
-import DrawerList from './components/DrawerList'
+import DrawerList from './components/DrawerList';
+import Home from './containers/Home'
 
 const drawerWidth = 240;
 
@@ -64,7 +65,7 @@ const routes = [
         path: "/",
         exact: true,
         title: () => <span> Home</span>,
-        main: () => <div>Home</div>,
+        main: () => <Home />,
     },
 ];
 

@@ -10,11 +10,20 @@ body {
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  background-image: url('https://s3.ap-south-1.amazonaws.com/pos-api-s3/pexels-photo-879832.jpeg')
+  background-color: aqua;
 }
 
 .loader {
   position: absolute;
   left: 47.5%;
   top: 50%;
+}
+
+.container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.login-banner {
 }
