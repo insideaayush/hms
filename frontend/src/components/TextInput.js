@@ -1,8 +1,8 @@
 import React from 'react'
 import { FormGroup, FormFeedback, Label, Input } from 'reactstrap';
 
-export default ({ name, label, error, type, ...rest }) => {
-    const id = `id_${name}`,
+export default ({ name, label, error, type, id_suffix, ...rest }) => {
+    const id = `id_${name}_${id_suffix}`,
     input_type = type ? type : "text"
     
     return (

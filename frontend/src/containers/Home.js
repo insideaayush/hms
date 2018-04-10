@@ -2,14 +2,11 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getUser} from '../reducers'
 
-const Home = (props) => {
-
-    console.log(props.user)
-    return (
-        <div>
-            Hello
-        </div>
-    )
+class Home extends React.Component{
+    render(){
+        console.log(this.props)
+        return null      
+    }
 }
 
 const mapStateToProps = (state) => ({

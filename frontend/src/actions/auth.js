@@ -9,9 +9,46 @@ export const TOKEN_FAILURE = '@@auth/TOKEN_FAILURE';
 export const LOGGED_IN_USER_REQUEST = '@@auth/LOGGED_IN_USER_REQUEST';
 export const LOGGED_IN_USER_RECEIVED = '@@auth/LOGGED_IN_USER_RECEIVED';
 export const LOGGED_IN_USER_FAILURE = '@@auth/LOGGED_IN_USER_FAILURE';
+export const LOGIN_TYPE_PATIENT = '@@auth/LOGIN_TYPE_PATIENT';
+export const LOGIN_TYPE_CLINIC = '@@auth/LOGIN_TYPE_CLINIC';
+export const LOGIN_TYPE_DOCTOR = '@@auth/LOGIN_TYPE_DOCTOR';
 
 
 export const login = (username, password) => ({
+    [RSAA]: {
+        endpoint: '/api/auth/token/obtain/',
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+        headers: { 'Content-Type': 'application/json' },
+        types: [
+            LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE
+        ]
+    }
+})
+
+export const loginPatient = (username, password) => ({
+    [RSAA]: {
+        endpoint: '/api/auth/token/obtain/',
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+        headers: { 'Content-Type': 'application/json' },
+        types: [
+            LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE
+        ]
+    }
+})
+export const loginClinic = (username, password) => ({
+    [RSAA]: {
+        endpoint: '/api/auth/token/obtain/',
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+        headers: { 'Content-Type': 'application/json' },
+        types: [
+            LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE
+        ]
+    }
+})
+export const loginDoctor = (username, password) => ({
     [RSAA]: {
         endpoint: '/api/auth/token/obtain/',
         method: 'POST',

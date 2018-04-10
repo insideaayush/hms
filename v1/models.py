@@ -1,8 +1,15 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    is_patient = models.BooleanField(default=False)
+    is_doctor = models.BooleanField(default=False)
+    is_clinic = models.BooleanField(default=False)
+
 
 """
 # Blog related models
@@ -150,7 +157,7 @@ ALL_GENDERS = [
 
 # Direct Health care models
 class Patient(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User,related_name="patient" ,on_delete=models.CASCADE)
     mobile = models.CharField(max_length=200)
     gender = models.CharField(max_length=100, choices=ALL_GENDERS, default="M")
     has_subscription = models.BooleanField(default=False)
@@ -163,9 +170,14 @@ class Patient(models.Model):
     def __str__(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
 
+    def save(self, *args, **kwargs):
+        self.user.is_patient = True
+        self.user.save()
+        super(Patient, self).save(*args, **kwargs)
+
 
 class Clinic(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User,related_name="clinic", on_delete=models.CASCADE)
     address = models.TextField(blank=True, default=None, null=True)
     joined_on = models.DateTimeField(auto_now_add=True)
     last_updated_on = models.DateTimeField(auto_now=True)
@@ -176,8 +188,13 @@ class Clinic(models.Model):
     def __str__(self):
         return "%s" % (self.user.first_name)
 
+    def save(self, *args, **kwargs):
+        self.user.is_clinic = True
+        self.user.save()
+        super(Clinic, self).save(*args, **kwargs)
+
 class Doctor(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="doctor", on_delete=models.CASCADE)
     available_at = models.ForeignKey(Clinic, related_name="available_doctors",on_delete=models.SET_NULL, null=True)
     all_clinics = models.ManyToManyField(Clinic)
     specialization = models.CharField(max_length=255, choices=DOCTOR_TYPES, default=None, null = True)
@@ -202,6 +219,8 @@ class Doctor(models.Model):
     def save(self, *args, **kwargs):
         if not self.description:
             self.description = DOCTOR_TYPES_VERBROSE[self.specialization]
+        self.user.is_doctor = True
+        self.user.save()
         super(Doctor, self).save(*args, **kwargs)
 
 
@@ -233,7 +252,7 @@ class Subscription(models.Model):
     active = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
     last_updated_on = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         ordering = ('last_updated_on', )
 

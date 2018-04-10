@@ -25,18 +25,18 @@ export default class LoginForm extends Component {
     }
 
     onSubmit = (event) => {
+        console.log(this.state)
         event.preventDefault()
         this.props.onSubmit(this.state.username, this.state.password)
     }
 
     render() {
         const errors = this.props.errors || {}
-
         return (
             <Form onSubmit={this.onSubmit}>
                 {errors.non_field_errors ? <Alert color="danger">{errors.non_field_errors}</Alert> : ""}
-                <TextInput name="username" label="Username" error={errors.username} getRef={input => this.primaryInput = input} onChange={this.handleInputChange} />
-                <TextInput name="password" label="Password" error={errors.password} type="password" onChange={this.handleInputChange} />
+                <TextInput name="username" id_suffix={this.props.type} label="Username" error={errors.username} getRef={input => this.primaryInput = input} onChange={this.handleInputChange} />
+                <TextInput name="password" id_suffix={this.props.type} label="Password" error={errors.password} type="password" onChange={this.handleInputChange} />
                 <Button type="submit" color="primary" size="lg">Log In</Button>
             </Form>
         )

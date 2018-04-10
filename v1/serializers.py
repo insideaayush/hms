@@ -1,12 +1,14 @@
 from rest_framework import serializers
 from drf_queryfields import QueryFieldsMixin
-from django.contrib.auth.models import User
 from v1.models import *
 
-class UserSerializer(QueryFieldsMixin, serializers.HyperlinkedModelSerializer):
+class UserSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'id', 'username', 'first_name', 'last_name', 'email')
+        fields = ('url', 'id', 'username', 'first_name', 'last_name', 'email',
+                  'is_patient', 'is_clinic', 'is_doctor')
+
+
 """
 # Serializer for blog part
 class TagSerializer(QueryFieldsMixin, serializers.ModelSerializer):

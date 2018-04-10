@@ -1,9 +1,19 @@
 from django.contrib import admin
 from .models import *
+from django.contrib.auth.admin import UserAdmin
 
 # admin.site.register(Tag)
 # admin.site.register(Category)
 # admin.site.register(Post)
+
+# admin.site.register(User)
+
+@admin.register(User)
+class UserAdmin(UserAdmin):
+    list_display = ('__str__', 'username', 'email', 'is_patient', 'is_doctor', 'is_clinic')
+    fieldsets = UserAdmin.fieldsets + (("Account Type", {
+        'fields': ('is_patient', 'is_doctor', 'is_clinic',)
+    }), )
 
 
 @admin.register(Patient)

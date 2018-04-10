@@ -5,6 +5,7 @@ const initialState = {
     access: undefined,
     refresh: undefined,
     user: undefined,
+    type: undefined,
     errors: {},
 }
 
@@ -12,6 +13,7 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case auth.LOGIN_SUCCESS:
             return {
+                ...state,
                 user: {
                     id: jwtDecode(action.payload.access).user_id
                 },
@@ -25,6 +27,7 @@ export default (state = initialState, action) => {
                     },
                 errors: {}
             }
+            
         case auth.TOKEN_RECEIVED:
             return {
                 ...state,
@@ -36,6 +39,7 @@ export default (state = initialState, action) => {
         case auth.LOGIN_FAILURE:
         case auth.TOKEN_FAILURE:
             return {
+                ...state,
                 access: undefined,
                 refresh: undefined,
                 errors:

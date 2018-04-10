@@ -4,22 +4,32 @@ import { Redirect } from 'react-router'
 
 import {withStyles} from "material-ui/styles"
 import LoginForm from '../components/LoginForm'
-import { login } from '../actions/auth'
+import { loginPatient, loginClinic, loginDoctor } from '../actions/auth'
 import { authErrors, isAuthenticated } from '../reducers'
-import { TabContent, TabPane, Nav, NavItem, NavLink, Jumbotron, Row, Col, Navbar, NavbarBrand} from 'reactstrap'
+import { TabContent, TabPane, Nav, NavItem, NavLink, Jumbotron, 
+        Container, Row, Col, Navbar, NavbarBrand } from 'reactstrap'
 import classnames from 'classnames';
 import login_banner from "../images/login-banner.jpg"
 import Typography from 'material-ui/Typography';
 
 const styles = (theme) => ({
-    root: {
-        marginRight: 0,
+    bannerTextContainer: {
+        backgroundColor: "rgba(255,255,255,0)",
+        color: "#fff",
     },
-    loginBanner: {
+    bannerTextJumbotron: {
+        backgroundColor: "rgba(255,255,255,0.4)",
+    },
+    root: {
+        // marginRight: 0,
+    },
+    sideBanner: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        backgroundColor: "rgba(1,2,3,1)",
         backgroundImage: "url("+login_banner + ")",
         height: "100vh",
-    },
-    leftCol: {
     },
     loginJumbo: {
         display: 'flex',
@@ -35,10 +45,8 @@ const styles = (theme) => ({
         marginTop: 16,
     },
     navbar: {
-        backgroundColor: "rgba(0,150,136,0)"
-    }
-
-
+        backgroundColor: "rgba(24,36,32,0.01)"
+    },
 })
 class Login extends React.Component {
     constructor(props) {
@@ -64,17 +72,49 @@ class Login extends React.Component {
             return <Redirect to='/' />
         }
         
+        var signInText = null
+        switch(this.state.activeTab){
+            case '1':
+                signInText = (
+                    <Typography variant="display1" gutterBottom> Log in as an User</Typography>
+                )
+                break;
+            case '2':
+                signInText = (
+                    <Typography variant="display1" gutterBottom> Log in as a Clinic</Typography>
+                )
+                break;
+            case '3':
+                signInText = (
+                    <Typography variant="display1" gutterBottom> Log in as a Doctor</Typography>
+                )
+                break;
+            default:
+                signInText = (
+                    <Typography variant="display1" gutterBottom> Log in</Typography>
+                )
+                break;
+        }
+
         return (
             <div>
                 <Navbar fixed="top"  light className={classes.navbar}>
-                    <NavbarBrand href="/" className="mr-auto">carebox</NavbarBrand>
+                    <NavbarBrand href="/" className="mr-auto">
+                        <Typography variant="title"> <strong>Carebox</strong></Typography>
+                    </NavbarBrand>
                 </Navbar>
                 <Row className={classes.root}>
-                    <Col xs={12} md={8} className={classes.loginBanner}>
+                    <Col xs={12} md={6} className={classes.sideBanner}>
+                        <Container fluid className={classes.bannerTextContainer}>
+                            <Jumbotron className={classes.bannerTextJumbotron}>
+                                <Typography variant="display2"> <strong>Carebox</strong> brings subscription based healthcare to your fingertips</Typography>
+                            </Jumbotron>
+                        </Container>
                     </Col>
-                    <Col xs={12} md={4} className={classes.loginJumbo}>
+                    <Col xs={12} md={6} className={classes.loginJumbo}>
+                        <Container>
                         <Jumbotron fluid className={classes.loginContainer}> 
-                            <Typography variant="display1" gutterBottom> Sign in</Typography>
+                            {signInText}
                             <Nav tabs>
                                 <NavItem>
                                     <NavLink
@@ -104,21 +144,22 @@ class Login extends React.Component {
                             <TabContent activeTab={this.state.activeTab}>
                                 <TabPane tabId="1">
                                     <div className={classes.tabContent}>
-                                        <LoginForm {...this.props} />
+                                        <LoginForm type="user" {...this.props} onSubmit={this.props.onSubmitPatient} />
                                     </div>
                                 </TabPane>
                                 <TabPane tabId="2">
                                     <div className={classes.tabContent}>
-                                        <LoginForm {...this.props} />
+                                        <LoginForm type="clinix" {...this.props} onSubmit={this.props.onSubmitClinic} />
                                     </div>
                                 </TabPane>
                                 <TabPane tabId="3">
                                     <div className={classes.tabContent}>
-                                        <LoginForm {...this.props} />
+                                        <LoginForm type="doctor" {...this.props} onSubmit={this.props.onSubmitDoctor} />
                                     </div>
                                 </TabPane>
                             </TabContent>
-                        </Jumbotron> 
+                        </Jumbotron>
+                        </Container>
                     </Col>
                 </Row>
             </div>
@@ -132,8 +173,14 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    onSubmit: (username, password) => {
-        dispatch(login(username, password))
+    onSubmitPatient: (username, password) => {
+        dispatch(loginPatient(username, password))
+    },
+    onSubmitClinic: (username, password) => {
+        dispatch(loginClinic(username, password))
+    },
+    onSubmitDoctor: (username, password) => {
+        dispatch(loginDoctor(username, password))
     }
 })
 

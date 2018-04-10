@@ -47,6 +47,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'gene_profile.urls'
 
+AUTH_USER_MODEL = 'v1.User'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
