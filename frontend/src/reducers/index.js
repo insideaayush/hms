@@ -2,10 +2,12 @@ import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import auth, * as fromAuth from './auth'
 import posts, * as fromPosts from './posts'
+import doctors, * as fromDoctors from './doctors'
 
 export default combineReducers({
     auth: auth,
     posts: posts,
+    doctors: doctors,
     router: routerReducer,
 })
 
@@ -28,12 +30,18 @@ export const getUserId =
     state => fromAuth.getUserId(state.auth)
 
 // Posts Helper Function
-
 export const getPostList = 
     state => fromPosts.allPosts(state.posts)
 
 export const isRetrievingPostList = 
     state => fromPosts.isRetrievingPostList(state.posts)
+
+// Doctors Helper Function
+export const allDoctors = 
+    state => fromDoctors.allDoctors(state.doctors)
+
+export const isLoadingDoctorsList = 
+    state => fromDoctors.isLoadingDoctorsList(state.doctors)
 
 export function withAuth(headers = {}) {
     return (state) => ({

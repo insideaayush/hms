@@ -20,9 +20,6 @@ const styles = (theme) => ({
     bannerTextJumbotron: {
         backgroundColor: "rgba(255,255,255,0.4)",
     },
-    root: {
-        // marginRight: 0,
-    },
     sideBanner: {
         display: "flex",
         flexDirection: "column",
@@ -103,7 +100,7 @@ class Login extends React.Component {
                         <Typography variant="title"> <strong>Carebox</strong></Typography>
                     </NavbarBrand>
                 </Navbar>
-                <Row className={classes.root}>
+                <Row>
                     <Col xs={12} md={6} className={classes.sideBanner}>
                         <Container fluid className={classes.bannerTextContainer}>
                             <Jumbotron className={classes.bannerTextJumbotron}>

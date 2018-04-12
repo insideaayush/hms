@@ -12,6 +12,11 @@ import './index.css';
 import 'typeface-roboto'
 import 'bootstrap/dist/css/bootstrap.css';
 
+/* eslint-disable */
+import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+
 // Apps
 import App from './App'
 import Login from './containers/Login';
@@ -20,15 +25,16 @@ const history = createHistory()
 const store = configureStore(history)
 
 ReactDOM.render((
-    <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <Switch>
-                <Route exact path="/login/" component={Login} />
-                <PrivateRoute path="/" component={App}/>
-                <PrivateRoute component={App}/>
-            </Switch>
-        </ConnectedRouter>
-    </Provider>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Provider store={store}>
+            <ConnectedRouter history={history}>
+                <Switch>
+                    <Route exact path="/login/" component={Login} />
+                    <PrivateRoute path="/" component={App}/>
+                    <PrivateRoute component={App}/>
+                </Switch>
+            </ConnectedRouter>
+        </Provider>
+    </MuiPickersUtilsProvider>
 ), document.getElementById('root'));
 registerServiceWorker();
-
