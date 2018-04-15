@@ -25,7 +25,7 @@ import { TableRow, TableCell } from 'material-ui/Table'
 import { CircularProgress } from 'material-ui/Progress'
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
-
+import {getDoctorFullName, getClinicFullName} from '../../constants'
 const styles = theme => ({
     paper: {
         padding: theme.spacing.unit
@@ -64,7 +64,6 @@ const Row = (props) => {
     )
 }
 
-
 class DoctorTable extends React.Component {
     constructor(props){
         super(props)
@@ -94,10 +93,10 @@ class DoctorTable extends React.Component {
             const rows = this.props.doctors.map((doctor) => {
                 return {
                     doctor_id: doctor.id,
-                    name: doctor.user,
+                    name: getDoctorFullName(doctor.user),
                     specialization: doctor.specialization,
                     description: doctor.description,
-                    in_at: (doctor.available_at) ? doctor.available_at.user : "N/A",
+                    in_at: (doctor.available_at) ? getClinicFullName(doctor.available_at) : "N/A",
                     available_at: doctor.available_at,
                     all_clinics: doctor.all_clinics,
                 }

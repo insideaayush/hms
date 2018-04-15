@@ -55,6 +55,9 @@ export const allDoctors =
 export const isLoadingDoctorsList = 
     state => fromDoctors.isLoadingDoctorsList(state.doctors)
 
+export const getLoggedInDoctor = 
+    state => fromDoctors.getLoggedInDoctor(state.doctors)
+
 // Doctors Helper Function
 export const allAppointments = 
     state => fromAppointments.allAppointments(state.appointments)

@@ -5,7 +5,7 @@ import { Route } from 'react-router'
 import { withStyles } from 'material-ui/styles';
 
 // actionCreaters and Reducers
-import { getUserId, getUser, getDoctor, getClinic, getPatient, isAuthenticated, appLoader} from './reducers'
+import { getUserId, getUser, isAuthenticated, appLoader} from './reducers'
 import {getLoggedInUser} from './actions/auth'
 
 // Components
@@ -20,6 +20,10 @@ import DrawerList from './components/DrawerList';
 import Home from './containers/Home'
 import { LinearProgress } from 'material-ui/Progress';
 import AppointmentsTable from './containers/AppointmentsTable';
+import { handleMessageClose, } from './actions/appointments'
+import { snackbarMessage, snackbarOpen } from './reducers'
+import Snackbar from 'material-ui/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 
 const drawerWidth = 240;
 
@@ -78,9 +82,13 @@ const routes = [
 ];
 
 class App extends React.Component {
-    state = {
-        mobileOpen: false,
-    };
+    constructor(props){
+        super(props)
+        this.handleSnackClose = this.handleSnackClose.bind(this)
+        this.state = {
+            mobileOpen: false,
+        };
+    }
 
     componentDidMount(){
         if(this.props.user_id){
@@ -91,6 +99,10 @@ class App extends React.Component {
     handleDrawerToggle = () => {
         this.setState({ mobileOpen: !this.state.mobileOpen });
     };
+
+    handleSnackClose() {
+        this.props.handleMessageClose()
+    }
 
     render() {
         const { classes, theme, loader } = this.props;
@@ -172,6 +184,30 @@ class App extends React.Component {
                         ))}
                     </main>
                 </div>
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    open={this.props.snackbarOpen}
+                    autoHideDuration={3000}
+                    onClose={this.handleSnackClose}
+                    SnackbarContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{this.props.snackbarMessage}</span>}
+                    action={[
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            // className={classes.close}
+                            onClick={this.handleSnackClose}
+                        >
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                />
             </div>
         );
     }
@@ -187,6 +223,8 @@ const mapStateToProps = (state) => ({
     user: getUser(state),
     isAuthenticated: isAuthenticated(state),
     loader: appLoader(state),
+    snackbarOpen: snackbarOpen(state),
+    snackbarMessage: snackbarMessage(state),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -197,6 +235,9 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch({
             type: '@@auth/HANDLE_LOGOUT'
         })
+    },
+    handleMessageClose: () => {
+        dispatch(handleMessageClose())
     }
 })
 

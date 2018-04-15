@@ -3,15 +3,12 @@ import { connect } from 'react-redux'
 import {withStyles} from 'material-ui/styles'
 
 // Actions and Reducers import 
-import { addAppointment, handleMessageClose} from "../../actions/appointments"
-import { snackbarOpen, snackbarMessage, getPatient } from "../../reducers"
+import { addAppointment} from "../../actions/appointments"
+import { getPatient } from "../../reducers"
 
 // Components
 import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper';
-import Snackbar from 'material-ui/Snackbar';
-import IconButton from 'material-ui/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import DoctorTable from './DoctorTable'
 import SearchDoctor from './SearchDoctor'
 import BookDoctorDialog from '../../components/BookDoctorDialog'
@@ -37,15 +34,12 @@ class PatientView extends React.Component {
         this.handleBook = this.handleBook.bind(this)
         this.handleDateChange=this.handleDateChange.bind(this)
         this.handleChangeClinic=this.handleChangeClinic.bind(this)
-        this.handleSnackClose=this.handleSnackClose.bind(this)
         this.state = {
             open: false,
             activeStep: 0,
             currentRow: null,
             selectedDate: new Date(),
             clinic: "",
-            snackbarOpen: false,
-            snackbarMessage: "",
         }
     }
 
@@ -74,7 +68,6 @@ class PatientView extends React.Component {
     }
 
     handleBook(){
-        console.log("sda", this.state)
         let data = {
             "book_by": this.props.patient.id,
             "doctor": this.state.currentRow.doctor_id,
@@ -116,10 +109,6 @@ class PatientView extends React.Component {
         this.setState({ clinic: event.target.value });
     }
 
-    handleSnackClose(){
-        this.props.handleMessageClose()
-    }
-
     render() {
         const {classes} = this.props
         return (
@@ -158,38 +147,12 @@ class PatientView extends React.Component {
                     <Grid item xs={12} sm={1}>
                     </Grid>
                 </Grid>
-                <Snackbar
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                    }}
-                    open={this.props.snackbarOpen}
-                    autoHideDuration={3000}
-                    onClose={this.handleSnackClose}
-                    SnackbarContentProps={{
-                        'aria-describedby': 'message-id',
-                    }}
-                    message={<span id="message-id">{this.props.snackbarMessage}</span>}
-                    action={[
-                        <IconButton
-                            key="close"
-                            aria-label="Close"
-                            color="inherit"
-                            className={classes.close}
-                            onClick={this.handleSnackClose}
-                        >
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                />
             </div>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    snackbarOpen: snackbarOpen(state),
-    snackbarMessage: snackbarMessage(state),
     patient: getPatient(state)
 })
 
@@ -197,9 +160,6 @@ const mapDispatchToProps = (dispatch) => ({
     addAppointment: (data) => {
         dispatch(addAppointment(data))
     },
-    handleMessageClose: () => {
-        dispatch(handleMessageClose())
-    }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(PatientView))

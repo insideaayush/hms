@@ -9,7 +9,7 @@ const ClinicPicker = (props) => {
     const { classes } = props
     const items = (props.all_clinics) ? props.all_clinics.map((clinic) => {
         return (
-            <MenuItem key={clinic.id} value={clinic.id}>{clinic.user}</MenuItem>
+            <MenuItem key={clinic} value={clinic}>{clinic}</MenuItem>
         )
     }) : null
     return (

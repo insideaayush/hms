@@ -197,9 +197,9 @@ class Clinic(models.Model):
 
 class Doctor(models.Model):
     user = models.ForeignKey(User, related_name="doctor", on_delete=models.CASCADE)
-    available_at = models.ForeignKey(Clinic, related_name="available_doctors",on_delete=models.SET_NULL, null=True)
+    available_at = models.ForeignKey(Clinic, related_name="available_doctors", on_delete=models.SET_NULL, null=True, blank=True, default=None)
     all_clinics = models.ManyToManyField(Clinic)
-    specialization = models.CharField(max_length=255, choices=DOCTOR_TYPES, default=None, null = True)
+    specialization = models.CharField(max_length=255, choices=DOCTOR_TYPES, default=None, null = True, blank=True)
     description = models.CharField(max_length=255, default=None, null=True, blank=True)
     joined_on = models.DateTimeField(auto_now_add=True)
     last_updated_on = models.DateTimeField(auto_now=True)
@@ -220,7 +220,8 @@ class Doctor(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.description:
-            self.description = DOCTOR_TYPES_VERBROSE[self.specialization]
+            if DOCTOR_TYPES_VERBROSE[self.specialization]:
+                self.description = DOCTOR_TYPES_VERBROSE[self.specialization]
         self.user.is_doctor = True
         self.user.save()
         super(Doctor, self).save(*args, **kwargs)
@@ -231,7 +232,7 @@ class Appointment(models.Model):
     book_by = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     location = models.ForeignKey(Clinic, on_delete=models.CASCADE)
-    status = models.CharField(max_length=100, choices=ALL_APPOINTMENT_STATUSES, default="Requested")
+    status = models.CharField(max_length=100, choices=ALL_APPOINTMENT_STATUSES, default="R")
     created_on = models.DateTimeField(auto_now_add=True)
     last_updated_on = models.DateTimeField(auto_now=True)
     preferred_time = models.DateTimeField(null=True, blank=True, default=None)

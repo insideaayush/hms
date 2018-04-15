@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
 
 // Actions and Reducers import 
-import { getAppointmentsList, getAppointmentsFilterByPatient, getAppointmentsFilterByClinic, getAppointmentsFilterByDoctor } from '../actions/appointments'
+import { setAppointmentStatus, getAppointmentsList, getAppointmentsFilterByPatient, getAppointmentsFilterByClinic, getAppointmentsFilterByDoctor } from '../actions/appointments'
 import { allAppointments, isRetrievingAppointmentsList, getUser, getPatient, getDoctor, getClinic } from '../reducers'
-
+import {getStatus} from '../constants'
 // Components
 import {
     SortingState,
@@ -25,7 +25,7 @@ import { TableRow, TableCell } from 'material-ui/Table'
 import { CircularProgress } from 'material-ui/Progress'
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
-// import Cancel from 'material-ui-icons/Cancel';
+import ChangeApptStatusDialog from  '../components/ChangeApptStatusDialog'
 
 const styles = theme => ({
     paper: {
@@ -42,42 +42,6 @@ const comparePrices = (a, b) => {
     return (_a < _b) ? -1 : 1
 }
 
-const ConfirmCell = (props) => {
-    return (
-        <TableCell>
-            <Button mini aria-label="set_apointment">
-                <AddIcon /> CONFIRM 
-            </Button>
-        </TableCell>
-    )
-}
-
-const SetStatusCell = (props) => {
-    return (
-        <TableCell>
-            <Button mini aria-label="set_apointment">
-                <AddIcon /> SET STATUS 
-            </Button>
-        </TableCell>
-    )
-}
-
-const Cell = (props) => {
-    if (props.column.name === 'set_apointment') {
-        return <ConfirmCell {...props} />;
-    }
-    if (props.column.name === 'set_status') {
-        return <SetStatusCell {...props} />;
-    }
-    return <Table.Cell {...props} />;
-};
-
-const Row = (props) => {
-    return (
-        <TableRow onClick={() => props.book(props.row)} key={props.tableRow.key} row={props.row} children={props.children} />
-    )
-}
-
 const getParsedDateTime = (d) => {
     return (new Date(Date.parse(d))).toString()
 }
@@ -86,6 +50,16 @@ class AppointmentsTable extends React.Component {
     constructor(props) {
         super(props)
         this.loadRowsFromProps = this.loadRowsFromProps.bind(this)
+        this.ConfirmCell = this.ConfirmCell.bind(this)
+        this.SetStatusCell = this.SetStatusCell.bind(this)
+        this.Cell = this.Cell.bind(this)
+        this.Row = this.Row.bind(this)
+        this.handleConfirmAppointment = this.handleConfirmAppointment.bind(this)
+        this.handleSetStatus = this.handleSetStatus.bind(this)
+        this.handleStatusDialogChange = this.handleStatusDialogChange.bind(this)
+        this.handleStatusDialogClickOpen = this.handleStatusDialogClickOpen.bind(this)
+        this.handleStatusDialogClose = this.handleStatusDialogClose.bind(this)
+        this.handleSetStatusOkPress = this.handleSetStatusOkPress.bind(this)
         this.state = {
             columnsPatient: [
                 { name: 'booking_id', title: 'BOOKING ID' },
@@ -120,8 +94,23 @@ class AppointmentsTable extends React.Component {
                 { columnName: 'booking_id', compare: comparePrices },
             ],
             pageSizes: [10, 15, 20, 0],
+            openStatusDialog: false,
+            appointmentStatus: "",
+            appointmentId: null,
         }
     }
+
+    handleStatusDialogChange = name => event => {
+        this.setState({ [name]: (event.target.value) });
+    };
+
+    handleStatusDialogClickOpen = (id) => {
+        this.setState({ appointmentId: id, openStatusDialog: true });
+    };
+
+    handleStatusDialogClose = () => {
+        this.setState({ appointmentId: null, openStatusDialog: false });
+    };
 
     componentDidMount() {
         if(this.props.user.is_patient){
@@ -142,11 +131,12 @@ class AppointmentsTable extends React.Component {
         if (this.props.appointments) {
             const rows = this.props.appointments.map((appointment) => {
                 return {
+                    id: appointment.id,
                     booking_id: appointment.booking_id,
                     book_by: appointment.book_by,
                     doctor: appointment.doctor,
                     clinic: appointment.location,
-                    status: appointment.status,
+                    status: getStatus(appointment.status),
                     booked_on: getParsedDateTime(appointment.created_on),
                     preferred_time: (appointment.preferred_time) ? getParsedDateTime(appointment.preferred_time) : "NOT SET",
                     appointment_time: (appointment.appointment_time) ? getParsedDateTime(appointment.appointment_time): "NOT SET",
@@ -157,8 +147,60 @@ class AppointmentsTable extends React.Component {
         return []
     }
 
+    ConfirmCell = (props) => {
+        return (
+            <TableCell>
+                <Button onClick={this.handleConfirmAppointment} mini aria-label="set_apointment">
+                    <AddIcon /> CONFIRM
+            </Button>
+            </TableCell>
+        )
+    }
+
+    SetStatusCell = (props) => {
+        return (
+            <TableCell>
+                <Button onClick={() => this.handleSetStatus(props.row.id)} mini aria-label="set_apointment">
+                    <AddIcon /> SET STATUS
+                </Button>
+            </TableCell>
+        )
+    }
+
+    Cell = (props) => {
+        if (props.column.name === 'set_apointment') {
+            return <this.ConfirmCell {...props} />;
+        }
+        if (props.column.name === 'set_status') {
+            return <this.SetStatusCell {...props} />;
+        }
+        return <Table.Cell {...props} />;
+    };
+
+    Row = (props) => {
+        return (
+            <TableRow key={props.tableRow.key} row={props.row} children={props.children} />
+        )
+    }
+
+    handleSetStatus(id){
+        this.handleStatusDialogClickOpen(id)
+    }
+
+    handleSetStatusOkPress(){
+        this.props.setAppointmentStatus(this.state.appointmentId, this.state.appointmentStatus)
+        this.setState({
+            openStatusDialog: false,
+            appointmentId: null,
+            appointmentStatus: ""
+        })
+    }
+
+    handleConfirmAppointment(){
+        console.log("confirm")
+    }
+
     render() {
-        console.log(this.props)
         const { classes } = this.props
         const { columnsPatient, columnsDoctor, columnsClinic, pageSizes, integratedSortingColumnExtensions } = this.state
         const rows = this.loadRowsFromProps()
@@ -193,7 +235,7 @@ class AppointmentsTable extends React.Component {
                     <IntegratedPaging />
                     <DragDropProvider />
                     <Table />
-                    <Table cellComponent={(props) => <Cell {...props} />} rowComponent={(props) => <Row book={() => {console.log("hello")}} {...props} />} />
+                    <Table cellComponent={(props) => <this.Cell {...props} />} rowComponent={(props) => <this.Row {...props} />} />
                     <TableColumnReordering />
                     <TableHeaderRow showSortingControls />
                     <TableFilterRow />
@@ -206,6 +248,15 @@ class AppointmentsTable extends React.Component {
                     <GroupingPanel showSortingControls />
                     <ColumnChooser />
                 </Grid>
+                <ChangeApptStatusDialog
+                    open={this.state.openStatusDialog}
+                    status={this.state.appointmentStatus}
+                    clinic={this.props.user.is_clinic}
+                    handleClickOpen={this.handleStatusDialogClickOpen}
+                    handleClose={this.handleStatusDialogClose}
+                    handleChange={this.handleStatusDialogChange}
+                    handleOkPress={this.handleSetStatusOkPress}
+                />
                 {this.props.loading && <CircularProgress className="loader" />}
             </div>
         )
@@ -233,6 +284,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     getAppointmentsFilterByDoctor: (id) => {
         dispatch(getAppointmentsFilterByDoctor(id))
+    },
+    setAppointmentStatus: (id, status) => {
+        dispatch(setAppointmentStatus(id, status))
     }
 })
 

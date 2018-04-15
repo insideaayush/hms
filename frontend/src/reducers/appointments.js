@@ -1,4 +1,6 @@
 import * as appointments from '../actions/appointments'
+import * as doctors from '../actions/doctors'
+
 
 const initialState = {
     appointments: [],
@@ -51,6 +53,51 @@ export default (state = initialState, action) => {
                 ...state,
                 snackbarMessage: "",
                 snackbarOpen: false,
+            }
+        case doctors.SET_DEFAULT_CLINIC_REQUEST:
+            return {
+                ...state,
+                loader: true,
+            }
+        case doctors.SET_DEFAULT_CLINIC_SUCCESS:
+            return {
+                ...state,
+                snackbarMessage: "Default Clinic changed successfully",
+                snackbarOpen: true, 
+                loader: false,
+            }
+        case doctors.SET_DEFAULT_CLINIC_FAILURE:
+            return {
+                ...state,
+                snackbarMessage: "Default Clinic change failed, Try Again",
+                snackbarOpen: true,
+                loader: false,
+            }
+        case appointments.SET_APPOINTMENT_STATUS_REQUEST:
+            return {
+                ...state,
+                loader: true
+            }
+        case appointments.SET_APPOINTMENT_STATUS_SUCCESS:
+            state.appointments.map((appointment) => {
+                if (appointment.id === action.payload.id) {
+                    appointment.status = action.payload.status
+                }
+                return appointment
+            })
+            return {
+                ...state,
+                loader: false,
+                snackbarMessage: "Appointment Status changed successfully",
+                snackbarOpen: true,
+                appointments: [...state.appointments] 
+            }
+        case appointments.SET_APPOINTMENT_STATUS_FAILURE:
+            return {
+                ...state,
+                loader: false,
+                snackbarMessage: "Appointment Status change failed, Try Again",
+                snackbarOpen: true,
             }
         default:
             return state
