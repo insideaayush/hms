@@ -11,8 +11,8 @@ import PropTypes from 'prop-types';
 import BookingSteps from './BookingSteps';
 import Grid from 'material-ui/Grid'
 import { withStyles } from 'material-ui/styles';
-import DateTimePicker from './DateTimePicker'
 import ClinicPicker from './ClinicPicker'
+import PickDateTime from './PickDateTime'
 
 const styles = theme => ({
     root: {
@@ -29,21 +29,7 @@ const styles = theme => ({
     },
 });
 
-const PickDateTime = (props) => {
-    return (
-        <Grid container spacing={24}>
-            <Grid item xs={12}>
-                Pick your preferred Date and Time for appointment
-                <DateTimePicker 
-                    selectedDate={props.selectedDate}
-                    handleDateChange={props.handleDateChange}
-            />
-            </Grid>
-            <Grid item xs={12}>
-            </Grid>
-        </Grid>
-    )
-}
+
 
 class BookDoctorDialog extends React.Component {
     constructor(props){

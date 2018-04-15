@@ -182,32 +182,32 @@ class App extends React.Component {
                                 component={route.main}
                             />
                         ))}
+                        <Snackbar
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            open={this.props.snackbarOpen}
+                            autoHideDuration={3000}
+                            onClose={this.handleSnackClose}
+                            SnackbarContentProps={{
+                                'aria-describedby': 'message-id',
+                            }}
+                            message={<span id="message-id">{this.props.snackbarMessage}</span>}
+                            action={[
+                                <IconButton
+                                    key="close"
+                                    aria-label="Close"
+                                    color="inherit"
+                                    // className={classes.close}
+                                    onClick={this.handleSnackClose}
+                                >
+                                    <CloseIcon />
+                                </IconButton>,
+                            ]}
+                        />
                     </main>
                 </div>
-                <Snackbar
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                    }}
-                    open={this.props.snackbarOpen}
-                    autoHideDuration={3000}
-                    onClose={this.handleSnackClose}
-                    SnackbarContentProps={{
-                        'aria-describedby': 'message-id',
-                    }}
-                    message={<span id="message-id">{this.props.snackbarMessage}</span>}
-                    action={[
-                        <IconButton
-                            key="close"
-                            aria-label="Close"
-                            color="inherit"
-                            // className={classes.close}
-                            onClick={this.handleSnackClose}
-                        >
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                />
             </div>
         );
     }

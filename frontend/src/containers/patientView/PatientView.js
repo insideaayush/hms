@@ -4,14 +4,16 @@ import {withStyles} from 'material-ui/styles'
 
 // Actions and Reducers import 
 import { addAppointment} from "../../actions/appointments"
-import { getPatient } from "../../reducers"
+import { getPatient, getUser } from "../../reducers"
 
 // Components
 import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper';
 import DoctorTable from './DoctorTable'
-import SearchDoctor from './SearchDoctor'
+// import SearchDoctor from './SearchDoctor'
 import BookDoctorDialog from '../../components/BookDoctorDialog'
+import { Jumbotron } from 'reactstrap'
+import Typography from 'material-ui/Typography';
 
 const styles = theme => ({
     paper: {
@@ -19,7 +21,10 @@ const styles = theme => ({
     },
     container: {
         position: "relative",
-    }
+    },
+    welcomeBanner: {
+        background: "linear-gradient(to left, #ffff1c, #00c3ff)",
+    },
 })
 
 class PatientView extends React.Component {
@@ -111,40 +116,57 @@ class PatientView extends React.Component {
 
     render() {
         const {classes} = this.props
+        let welcomeMessage = ""
+        if (this.props.user) {
+            welcomeMessage = "Hello " + this.props.user.first_name + " " + this.props.user.last_name
+        }
+        else {
+            welcomeMessage = "Hello"
+        }
+        
         return (
             <div>
-                <BookDoctorDialog
-                    open={this.state.open}
-                    currentRow={this.state.currentRow}
-                    handleClickOpen={this.handleClickOpen}
-                    handleClose={this.handleClose}
-                    activeStep={this.state.activeStep}
-                    handleNext={this.handleNext}
-                    handleBack={this.handleBack}
-                    handleReset={this.handleReset}
-                    clinic={this.state.clinic}
-                    handleChangeClinic={this.handleChangeClinic}
-                    selectedDate={this.state.selectedDate}
-                    handleDateChange={this.handleDateChange}
-                    handleBook={this.handleBook}
-
-                />
+                <Jumbotron className={classes.welcomeBanner}>
+                    <Typography variant="title" gutterBottom>
+                        {welcomeMessage}
+                    </Typography>
+                    <Typography variant="subheading">
+                        You can book a new appointment from here. To view <strong><em>pending appointments</em></strong> click on menu and go to appointments.
+                    </Typography>
+                </Jumbotron>
                 <Grid container spacing={24} className={classes.container}>
-                    <Grid item xs={12} sm={2}>
+                    <BookDoctorDialog
+                        open={this.state.open}
+                        currentRow={this.state.currentRow}
+                        handleClickOpen={this.handleClickOpen}
+                        handleClose={this.handleClose}
+                        activeStep={this.state.activeStep}
+                        handleNext={this.handleNext}
+                        handleBack={this.handleBack}
+                        handleReset={this.handleReset}
+                        clinic={this.state.clinic}
+                        handleChangeClinic={this.handleChangeClinic}
+                        selectedDate={this.state.selectedDate}
+                        handleDateChange={this.handleDateChange}
+                        handleBook={this.handleBook}
+
+                    />
+                    {/* <Grid item xs={12} sm={2}>
                     </Grid>
                     <Grid item xs={12} sm={8}>
                         <SearchDoctor />
                     </Grid>
                     <Grid item xs={12} sm={2}>
+                    </Grid> */}
+                    <Grid item xs={12} sm={12}>
+                        <Typography align="center" variant="display1">
+                            Book an Appointment
+                        </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={1}>
-                    </Grid>
-                    <Grid item xs={12} sm={10}>
+                    <Grid item xs={12} sm={12}>
                         <Paper className={classes.paper}>
                             <DoctorTable addToBookCheckout={this.addToBookCheckout}/>
                         </Paper>
-                    </Grid>
-                    <Grid item xs={12} sm={1}>
                     </Grid>
                 </Grid>
             </div>
@@ -153,6 +175,7 @@ class PatientView extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+    user: getUser(state),
     patient: getPatient(state)
 })
 

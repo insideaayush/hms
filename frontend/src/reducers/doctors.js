@@ -19,6 +19,7 @@ export default (state = initialState, action) => {
                 loading: false,
                 doctors: action.payload
             }
+        case doctors.SET_UNAVAILABLE_SUCCESS:
         case doctors.SET_DEFAULT_CLINIC_SUCCESS:
             state.doctors.map((doctor) => {
                 if(doctor.id === action.payload.id){

@@ -6,6 +6,9 @@ export const GET_ALL_DOCTORS_FAILURE = '@@doctors/GET_ALL_DOCTORS_FAILURE';
 export const SET_DEFAULT_CLINIC_REQUEST = '@@doctors/SET_DEFAULT_CLINIC_REQUEST';
 export const SET_DEFAULT_CLINIC_SUCCESS = '@@doctors/SET_DEFAULT_CLINIC_SUCCESS';
 export const SET_DEFAULT_CLINIC_FAILURE = '@@doctors/SET_DEFAULT_CLINIC_FAILURE';
+export const SET_UNAVAILABLE_REQUEST = '@@doctors/SET_UNAVAILABLE_REQUEST'
+export const SET_UNAVAILABLE_SUCCESS = '@@doctors/SET_UNAVAILABLE_SUCCESS'
+export const SET_UNAVAILABLE_FAILURE = '@@doctors/SET_UNAVAILABLE_FAILURE'
 
 export const getDoctorsList = () => ({
     [RSAA]: {
@@ -27,6 +30,18 @@ export const setDefaultClinic = (doctor_id, clinic_id) => ({
         headers: withAuth({ 'Content-Type': 'application/json' }),
         types: [
             SET_DEFAULT_CLINIC_REQUEST, SET_DEFAULT_CLINIC_SUCCESS, SET_DEFAULT_CLINIC_FAILURE
+        ]
+    }
+})
+
+export const setUnavailable = (doctor_id) => ({
+    [RSAA]: {
+        endpoint: '/api/v1/doctors/' + doctor_id + "/",
+        method: 'PATCH',
+        body: JSON.stringify({ available_at: null}),
+        headers: withAuth({ 'Content-Type': 'application/json' }),
+        types: [
+            SET_UNAVAILABLE_REQUEST, SET_UNAVAILABLE_SUCCESS, SET_UNAVAILABLE_FAILURE
         ]
     }
 })

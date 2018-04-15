@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
 
 // Actions and Reducers import 
-import { setAppointmentStatus, getAppointmentsList, getAppointmentsFilterByPatient, getAppointmentsFilterByClinic, getAppointmentsFilterByDoctor } from '../actions/appointments'
+import { patchAppointment, getAppointmentsList, getAppointmentsFilterByPatient, getAppointmentsFilterByClinic, getAppointmentsFilterByDoctor } from '../actions/appointments'
 import { allAppointments, isRetrievingAppointmentsList, getUser, getPatient, getDoctor, getClinic } from '../reducers'
 import {getStatus} from '../constants'
 // Components
@@ -26,6 +26,7 @@ import { CircularProgress } from 'material-ui/Progress'
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
 import ChangeApptStatusDialog from  '../components/ChangeApptStatusDialog'
+import SetAppointmentTimeDialog from  '../components/SetAppointmentTimeDialog'
 
 const styles = theme => ({
     paper: {
@@ -60,6 +61,10 @@ class AppointmentsTable extends React.Component {
         this.handleStatusDialogClickOpen = this.handleStatusDialogClickOpen.bind(this)
         this.handleStatusDialogClose = this.handleStatusDialogClose.bind(this)
         this.handleSetStatusOkPress = this.handleSetStatusOkPress.bind(this)
+        this.handleAppointmentTimeDialogChange = this.handleAppointmentTimeDialogChange.bind(this)
+        this.handleAppointmentTimeDialogClickOpen = this.handleAppointmentTimeDialogClickOpen.bind(this)
+        this.handleAppointmentTimeDialogClose = this.handleAppointmentTimeDialogClose.bind(this)
+        this.handleAppointmentTimeOkPress = this.handleAppointmentTimeOkPress.bind(this)
         this.state = {
             columnsPatient: [
                 { name: 'booking_id', title: 'BOOKING ID' },
@@ -95,8 +100,10 @@ class AppointmentsTable extends React.Component {
             ],
             pageSizes: [10, 15, 20, 0],
             openStatusDialog: false,
-            appointmentStatus: "",
             appointmentId: null,
+            openAppointmentTimeDialog: false,
+            appointmentStatus: "",
+            appointmentTime: new Date(),
         }
     }
 
@@ -110,6 +117,18 @@ class AppointmentsTable extends React.Component {
 
     handleStatusDialogClose = () => {
         this.setState({ appointmentId: null, openStatusDialog: false });
+    };
+    
+    handleAppointmentTimeDialogChange = name => event => {
+        this.setState({ [name]: (event.target.value) });
+    };
+
+    handleAppointmentTimeDialogClickOpen = (id) => {
+        this.setState({ appointmentId: id, openAppointmentTimeDialog: true });
+    };
+
+    handleAppointmentTimeDialogClose = () => {
+        this.setState({ appointmentId: null, openAppointmentTimeDialog: false });
     };
 
     componentDidMount() {
@@ -150,7 +169,7 @@ class AppointmentsTable extends React.Component {
     ConfirmCell = (props) => {
         return (
             <TableCell>
-                <Button onClick={this.handleConfirmAppointment} mini aria-label="set_apointment">
+                <Button onClick={() => this.handleConfirmAppointment(props.row.id)} mini aria-label="set_apointment">
                     <AddIcon /> CONFIRM
             </Button>
             </TableCell>
@@ -186,18 +205,35 @@ class AppointmentsTable extends React.Component {
     handleSetStatus(id){
         this.handleStatusDialogClickOpen(id)
     }
-
+    
     handleSetStatusOkPress(){
-        this.props.setAppointmentStatus(this.state.appointmentId, this.state.appointmentStatus)
+        let data = {
+            status: this.state.appointmentStatus
+        }
+        this.props.patchAppointment(this.state.appointmentId, data )
         this.setState({
             openStatusDialog: false,
             appointmentId: null,
             appointmentStatus: ""
         })
     }
-
-    handleConfirmAppointment(){
-        console.log("confirm")
+    
+    handleAppointmentTimeOkPress(){
+        let data = {
+            status: this.state.appointmentStatus,
+            appointment_time:  this.state.appointmentTime,
+        }
+        this.props.patchAppointment(this.state.appointmentId, data )
+        this.setState({
+            openAppointmentTimeDialog: false,
+            appointmentId: null,
+            appointmentStatus: "",
+            appointmentTime: new Date()
+        }) 
+    }
+    
+    handleConfirmAppointment(id){
+        this.handleAppointmentTimeDialogClickOpen(id)
     }
 
     render() {
@@ -247,17 +283,27 @@ class AppointmentsTable extends React.Component {
                     <Toolbar />
                     <GroupingPanel showSortingControls />
                     <ColumnChooser />
+                    <ChangeApptStatusDialog
+                        open={this.state.openStatusDialog}
+                        status={this.state.appointmentStatus}
+                        clinic={this.props.user.is_clinic}
+                        handleClickOpen={this.handleStatusDialogClickOpen}
+                        handleClose={this.handleStatusDialogClose}
+                        handleChange={this.handleStatusDialogChange}
+                        handleOkPress={this.handleSetStatusOkPress}
+                    />
+                    <SetAppointmentTimeDialog
+                        open={this.state.openAppointmentTimeDialog}
+                        status={this.state.appointmentStatus}
+                        selectedDate={this.state.appointmentTime}
+                        clinic={this.props.user.is_clinic}
+                        handleClickOpen={this.handleAppointmentTimeDialogClickOpen}
+                        handleClose={this.handleAppointmentTimeDialogClose}
+                        handleChange={this.handleAppointmentTimeDialogChange}
+                        handleOkPress={this.handleAppointmentTimeOkPress} 
+                    />
+                    {this.props.loading && <CircularProgress className="loader" />}
                 </Grid>
-                <ChangeApptStatusDialog
-                    open={this.state.openStatusDialog}
-                    status={this.state.appointmentStatus}
-                    clinic={this.props.user.is_clinic}
-                    handleClickOpen={this.handleStatusDialogClickOpen}
-                    handleClose={this.handleStatusDialogClose}
-                    handleChange={this.handleStatusDialogChange}
-                    handleOkPress={this.handleSetStatusOkPress}
-                />
-                {this.props.loading && <CircularProgress className="loader" />}
             </div>
         )
     }
@@ -285,8 +331,8 @@ const mapDispatchToProps = (dispatch) => ({
     getAppointmentsFilterByDoctor: (id) => {
         dispatch(getAppointmentsFilterByDoctor(id))
     },
-    setAppointmentStatus: (id, status) => {
-        dispatch(setAppointmentStatus(id, status))
+    patchAppointment: (id, data) => {
+        dispatch(patchAppointment(id, data))
     }
 })
 

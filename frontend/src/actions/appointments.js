@@ -8,9 +8,9 @@ export const ADD_APPOINTMENT_REQUEST = '@@appointments/ADD_APPOINTMENT_REQUEST';
 export const ADD_APPOINTMENT_SUCCESS = '@@appointments/ADD_APPOINTMENT_SUCCESS';
 export const ADD_APPOINTMENT_FAILURE = '@@appointments/ADD_APPOINTMENT_FAILURE';
 export const HANDLE_MESSAGE_CLOSE = '@@appointments/HANDLE_MESSAGE_CLOSE';
-export const SET_APPOINTMENT_STATUS_REQUEST = '@@appointments/SET_APPOINTMENT_STATUS_REQUEST'
-export const SET_APPOINTMENT_STATUS_SUCCESS = '@@appointments/SET_APPOINTMENT_STATUS_SUCCESS'
-export const SET_APPOINTMENT_STATUS_FAILURE = '@@appointments/SET_APPOINTMENT_STATUS_FAILURE'
+export const PATCH_APPOINTMENT_REQUEST = '@@appointments/PATCH_APPOINTMENT_REQUEST'
+export const PATCH_APPOINTMENT_SUCCESS = '@@appointments/PATCH_APPOINTMENT_SUCCESS'
+export const PATCH_APPOINTMENT_FAILURE = '@@appointments/PATCH_APPOINTMENT_FAILURE'
 
 
 export const getAppointmentsList = () => ({
@@ -77,14 +77,14 @@ export const handleMessageClose = () => {
     }
 }
 
-export const setAppointmentStatus = (id, status) => ({
+export const patchAppointment = (id, data) => ({
     [RSAA]: {
         endpoint: '/api/v1/appointments/' + id + '/',
         method: 'PATCH',
-        body: JSON.stringify({status: status}),
+        body: JSON.stringify(data),
         headers: withAuth({ 'Content-Type': 'application/json' }),
         types: [
-            SET_APPOINTMENT_STATUS_REQUEST, SET_APPOINTMENT_STATUS_SUCCESS, SET_APPOINTMENT_STATUS_FAILURE
+            PATCH_APPOINTMENT_REQUEST, PATCH_APPOINTMENT_SUCCESS, PATCH_APPOINTMENT_FAILURE
         ]
     }
 })

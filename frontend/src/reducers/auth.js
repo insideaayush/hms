@@ -1,5 +1,6 @@
 import jwtDecode from 'jwt-decode'
 import * as auth from '../actions/auth'
+import * as doctors from '../actions/doctors'
 
 const initialState = {
     access: undefined,
@@ -7,6 +8,9 @@ const initialState = {
     user: undefined,
     type: undefined,
     errors: {},
+    clinic: undefined,
+    doctor: undefined,
+    patient: undefined,
 }
 
 export default (state = initialState, action) => {
@@ -63,7 +67,12 @@ export default (state = initialState, action) => {
                 ...state,
                 patient: {...action.payload[0]}
             }
-        
+        case doctors.SET_UNAVAILABLE_SUCCESS:
+            let updated_clinic = { ...state.clinic, available_doctors: state.clinic.available_doctors.filter((id) => id !== action.payload.id)}
+            return {
+                ...state,
+                clinic: {...updated_clinic}
+            }
         case auth.LOGGED_IN_CLINIC_RECEIVED:
             return {
                 ...state,

@@ -73,15 +73,35 @@ export default (state = initialState, action) => {
                 snackbarOpen: true,
                 loader: false,
             }
-        case appointments.SET_APPOINTMENT_STATUS_REQUEST:
+        case doctors.SET_UNAVAILABLE_REQUEST:
+            return {
+                ...state,
+                loader: true,
+            }
+        case doctors.SET_UNAVAILABLE_SUCCESS:
+            return {
+                ...state,
+                snackbarMessage: "Doctor's availability changed successfully",
+                snackbarOpen: true, 
+                loader: false,
+            }
+        case doctors.SET_UNAVAILABLE_FAILURE:
+            return {
+                ...state,
+                snackbarMessage: "Doctor's availability change failed, Try Again",
+                snackbarOpen: true,
+                loader: false,
+            }
+        case appointments.PATCH_APPOINTMENT_REQUEST:
             return {
                 ...state,
                 loader: true
             }
-        case appointments.SET_APPOINTMENT_STATUS_SUCCESS:
+        case appointments.PATCH_APPOINTMENT_SUCCESS:
             state.appointments.map((appointment) => {
                 if (appointment.id === action.payload.id) {
                     appointment.status = action.payload.status
+                    appointment.appointment_time = action.payload.appointment_time
                 }
                 return appointment
             })
@@ -92,7 +112,7 @@ export default (state = initialState, action) => {
                 snackbarOpen: true,
                 appointments: [...state.appointments] 
             }
-        case appointments.SET_APPOINTMENT_STATUS_FAILURE:
+        case appointments.PATCH_APPOINTMENT_FAILURE:
             return {
                 ...state,
                 loader: false,
