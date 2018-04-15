@@ -39,6 +39,8 @@ class PatientViewSet(viewsets.ModelViewSet):
 
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user',)
 
 class ClinicViewSet(viewsets.ModelViewSet):
     """
@@ -47,6 +49,8 @@ class ClinicViewSet(viewsets.ModelViewSet):
 
     queryset = Clinic.objects.all()
     serializer_class = ClinicSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user',)
 
 class DoctorViewSet(viewsets.ModelViewSet):
     """
@@ -55,6 +59,8 @@ class DoctorViewSet(viewsets.ModelViewSet):
 
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user',)
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     """
@@ -63,6 +69,9 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_fields = ('book_by', 'doctor', 'location' )
+
 
 class DirectCarePlanViewSet(viewsets.ModelViewSet):
     """

@@ -22,7 +22,10 @@ class BookingSteps extends React.Component {
     render() {
         const { classes, activeStep } = this.props;
         const steps = this.props.getSteps();
-        
+        let clinicName = ""
+        if(this.props.clinic !== "" && activeStep === steps.length){
+            clinicName = this.props.currentRow.all_clinics.filter((clinic) => clinic.id === this.props.clinic)[0].user
+        }
         return (
             <div className={classes.root}>
                 <Stepper activeStep={activeStep} alternativeLabel>
@@ -41,6 +44,9 @@ class BookingSteps extends React.Component {
                                 All steps completed - you&quot;re finished
                                 You can press on Book to book your appointment
                             </Typography>
+                            <strong> Clinic: </strong> {clinicName} <br />
+                            <strong> Preferred Date and Time: </strong> {this.props.selectedDate.toString()} <br />
+                            
                             <Button onClick={this.props.handleReset}>Reset</Button>
                         </div>
                     ) : (

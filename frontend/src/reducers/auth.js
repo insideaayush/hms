@@ -57,6 +57,25 @@ export default (state = initialState, action) => {
                 ...state,
                 user: {...action.payload}
             }
+        
+        case auth.LOGGED_IN_PATIENT_RECEIVED:
+            return {
+                ...state,
+                patient: {...action.payload[0]}
+            }
+        
+        case auth.LOGGED_IN_CLINIC_RECEIVED:
+            return {
+                ...state,
+                clinic: {...action.payload[0]}
+            }
+        
+        case auth.LOGGED_IN_DOCTOR_RECEIVED:
+            return {
+                ...state,
+                doctor: {...action.payload[0]}
+            }
+        
         default:
             return state
     }
@@ -98,6 +117,15 @@ export function errors(state) {
 
 export function getUser(state) {
     return state.user
+}
+export function getPatient(state) {
+    return state.patient
+}
+export function getClinic(state) {
+    return state.clinic
+}
+export function getDoctor(state) {
+    return state.doctor
 }
 
 export function getUserId(state) {

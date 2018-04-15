@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 // Icons
 import HomeIcon from 'material-ui-icons/Home';
 import LogoutIcon from 'material-ui-icons/ExitToApp';
+import NoteAdd from 'material-ui-icons/NoteAdd';
 
 const styles = theme => ({
     root: {
@@ -29,9 +30,9 @@ const sidebarItems = {
             url: '/',
         },
         {
-            text: 'Detail',
-            icon: <HomeIcon />,    
-            url: '/detail',
+            text: 'Appointments',
+            icon: <NoteAdd />,    
+            url: '/appointments/',
         },
     ],
     secondary: [

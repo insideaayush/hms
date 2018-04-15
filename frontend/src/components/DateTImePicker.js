@@ -1,33 +1,23 @@
 import React, { Fragment, PureComponent } from 'react';
-import DateTimePicker from 'material-ui-pickers/DateTimePicker';
-// add this to html document   
-// < link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons" >
+import DTP from 'material-ui-pickers/DateTimePicker';
 
-export default class DateTImePicker extends PureComponent {
-    state = {
-        selectedDate: new Date(),
-    }
-
-    handleDateChange = (date) => {
-        this.setState({ selectedDate: date });
-    }
-
-    render() {
-        const { selectedDate } = this.state;
-
+class DateTimePicker extends PureComponent {
+    render(){
         return (
             <Fragment>
                 <div className="picker">
-                    <DateTimePicker
-                        value={selectedDate}
+                    <DTP
+                        value={this.props.selectedDate}
                         disablePast
-                        onChange={this.handleDateChange}
+                        onChange={this.props.handleDateChange}
                         label="Select Appointment Time"
                         showTodayButton
                         fullWidth
                     />
                 </div>
             </Fragment>
-        );
+        )
     }
 }
+
+export default DateTimePicker

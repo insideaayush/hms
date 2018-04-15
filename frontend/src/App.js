@@ -5,7 +5,7 @@ import { Route } from 'react-router'
 import { withStyles } from 'material-ui/styles';
 
 // actionCreaters and Reducers
-import {getUserId, getUser, isAuthenticated} from './reducers'
+import { getUserId, getUser, getDoctor, getClinic, getPatient, isAuthenticated, appLoader} from './reducers'
 import {getLoggedInUser} from './actions/auth'
 
 // Components
@@ -18,6 +18,8 @@ import Divider from 'material-ui/Divider';
 import MenuIcon from 'material-ui-icons/Menu';
 import DrawerList from './components/DrawerList';
 import Home from './containers/Home'
+import { LinearProgress } from 'material-ui/Progress';
+import AppointmentsTable from './containers/AppointmentsTable';
 
 const drawerWidth = 240;
 
@@ -67,6 +69,12 @@ const routes = [
         title: () => <span> Home</span>,
         main: () => <Home />,
     },
+    {
+        path: "/appointments/",
+        exact: true,
+        title: () => <span> Appointments</span>,
+        main: () => <AppointmentsTable />,
+    },
 ];
 
 class App extends React.Component {
@@ -85,7 +93,7 @@ class App extends React.Component {
     };
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme, loader } = this.props;
         const drawer = (
             <div>
                 <div className={classes.drawerHeader}>
@@ -96,12 +104,18 @@ class App extends React.Component {
                     </Toolbar>
                 </div>
                 <Divider />
-                <DrawerList handleLogout={this.props.handleLogout.bind(this)} />             
+                <DrawerList 
+                    handleLogout={this.props.handleLogout.bind(this)} 
+                    is_patient={(this.props.user) ? this.props.user.is_patient : false}
+                    is_doctor={(this.props.user) ? this.props.user.is_doctor : false}
+                    is_clinic={(this.props.user) ? this.props.user.is_clinic : false}
+                />             
             </div>
         );
 
         return (
             <div className={classes.root}>
+                {(loader) ? <LinearProgress color="secondary" /> : null}
                 <div className={classes.appFrame}>
                     <AppBar className={classes.appBar}>
                         <Toolbar>
@@ -171,7 +185,8 @@ App.propTypes = {
 const mapStateToProps = (state) => ({
     user_id: getUserId(state),
     user: getUser(state),
-    isAuthenticated: isAuthenticated(state)
+    isAuthenticated: isAuthenticated(state),
+    loader: appLoader(state),
 })
 
 const mapDispatchToProps = (dispatch) => ({

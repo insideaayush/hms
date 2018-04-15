@@ -24,6 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 INSTALLED_APPS = [
     'storages',
     'rest_framework',
+    'django_filters',
     'v1.apps.V1Config',
     'django.contrib.admin',
     'django.contrib.auth',

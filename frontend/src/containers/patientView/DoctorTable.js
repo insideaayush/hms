@@ -75,6 +75,7 @@ class DoctorTable extends React.Component {
                 { name: 'name', title: 'NAME' },
                 { name: 'specialization', title: 'SPECIALIZATION' },
                 { name: 'description', title: 'DESCRIPTION' },
+                { name: 'in_at', title: 'AVAILABLE AT' },
                 { name: 'book', title: 'ACTION' },
             ],
             integratedSortingColumnExtensions: [
@@ -93,9 +94,12 @@ class DoctorTable extends React.Component {
             const rows = this.props.doctors.map((doctor) => {
                 return {
                     doctor_id: doctor.id,
-                    name: 'Dr. ' + doctor.user.first_name + ' ' +  doctor.user.last_name,
+                    name: doctor.user,
                     specialization: doctor.specialization,
                     description: doctor.description,
+                    in_at: (doctor.available_at) ? doctor.available_at.user : "N/A",
+                    available_at: doctor.available_at,
+                    all_clinics: doctor.all_clinics,
                 }
             })
             return rows

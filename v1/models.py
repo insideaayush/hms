@@ -4,6 +4,8 @@ from django.db import models
 from django.utils.text import slugify
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
+from sequences import get_next_value
+from django.db import transaction
 
 class User(AbstractUser):
     is_patient = models.BooleanField(default=False)
@@ -225,13 +227,14 @@ class Doctor(models.Model):
 
 
 class Appointment(models.Model):
-    booking_id = models.CharField(max_length=255,unique=True)
+    booking_id = models.CharField(max_length=255,unique=True, blank=True, null=True)
     book_by = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     location = models.ForeignKey(Clinic, on_delete=models.CASCADE)
     status = models.CharField(max_length=100, choices=ALL_APPOINTMENT_STATUSES, default="Requested")
     created_on = models.DateTimeField(auto_now_add=True)
     last_updated_on = models.DateTimeField(auto_now=True)
+    preferred_time = models.DateTimeField(null=True, blank=True, default=None)
     appointment_time = models.DateTimeField(null=True, default=None, blank=True)
 
     class Meta:
@@ -239,6 +242,14 @@ class Appointment(models.Model):
 
     def __str__(self):
         return self.booking_id
+
+    def save(self, *args, **kwargs):
+        if not self.booking_id:
+            with transaction.atomic():
+                book_id = "BOOK000%d" % (get_next_value('BOOK000'))
+                self.booking_id = book_id
+        super(Appointment, self).save(*args, **kwargs)
+
 
 class DirectCarePlan(models.Model):
     kind = models.CharField(max_length=200)

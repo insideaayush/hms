@@ -12,6 +12,15 @@ export const LOGGED_IN_USER_FAILURE = '@@auth/LOGGED_IN_USER_FAILURE';
 export const LOGIN_TYPE_PATIENT = '@@auth/LOGIN_TYPE_PATIENT';
 export const LOGIN_TYPE_CLINIC = '@@auth/LOGIN_TYPE_CLINIC';
 export const LOGIN_TYPE_DOCTOR = '@@auth/LOGIN_TYPE_DOCTOR';
+export const LOGGED_IN_PATIENT_REQUEST = '@@auth/LOGGED_IN_PATIENT_REQUEST'
+export const LOGGED_IN_PATIENT_RECEIVED = '@@auth/LOGGED_IN_PATIENT_RECEIVED'
+export const LOGGED_IN_PATIENT_FAILURE = '@@auth/LOGGED_IN_PATIENT_FAILURE'
+export const LOGGED_IN_DOCTOR_REQUEST = '@@auth/LOGGED_IN_DOCTOR_REQUEST'
+export const LOGGED_IN_DOCTOR_RECEIVED = '@@auth/LOGGED_IN_DOCTOR_RECEIVED'
+export const LOGGED_IN_DOCTOR_FAILURE = '@@auth/LOGGED_IN_DOCTOR_FAILURE'
+export const LOGGED_IN_CLINIC_REQUEST = '@@auth/LOGGED_IN_CLINIC_REQUEST'
+export const LOGGED_IN_CLINIC_RECEIVED = '@@auth/LOGGED_IN_CLINIC_RECEIVED'
+export const LOGGED_IN_CLINIC_FAILURE = '@@auth/LOGGED_IN_CLINIC_FAILURE'
 
 
 export const login = (username, password) => ({
@@ -79,6 +88,38 @@ export const getLoggedInUser = (id) => ({
         headers: withAuth({ 'Content-Type': 'application/json' }),
         types: [ 
             LOGGED_IN_USER_REQUEST, LOGGED_IN_USER_RECEIVED, LOGGED_IN_USER_FAILURE
+        ]
+    }
+})
+export const getLoggedInPatient = (id) => ({
+    [RSAA]: {
+        endpoint: '/api/v1/patients/?user=' + id,
+        method: 'GET',
+        headers: withAuth({ 'Content-Type': 'application/json' }),
+        types: [ 
+            LOGGED_IN_PATIENT_REQUEST, LOGGED_IN_PATIENT_RECEIVED, LOGGED_IN_PATIENT_FAILURE
+        ]
+    }
+})
+
+export const getLoggedInDoctor = (id) => ({
+    [RSAA]: {
+        endpoint: '/api/v1/doctors/?user=' + id,
+        method: 'GET',
+        headers: withAuth({ 'Content-Type': 'application/json' }),
+        types: [ 
+            LOGGED_IN_DOCTOR_REQUEST, LOGGED_IN_DOCTOR_RECEIVED, LOGGED_IN_DOCTOR_FAILURE
+        ]
+    }
+})
+
+export const getLoggedInClinic = (id) => ({
+    [RSAA]: {
+        endpoint: '/api/v1/clinics/?user=' + id,
+        method: 'GET',
+        headers: withAuth({ 'Content-Type': 'application/json' }),
+        types: [ 
+            LOGGED_IN_CLINIC_REQUEST, LOGGED_IN_CLINIC_RECEIVED, LOGGED_IN_CLINIC_FAILURE
         ]
     }
 })

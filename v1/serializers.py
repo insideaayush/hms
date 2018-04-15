@@ -46,14 +46,14 @@ class PostSerializer(QueryFieldsMixin, serializers.ModelSerializer):
 """
 
 class PatientSerializer(QueryFieldsMixin, serializers.ModelSerializer):
-    user = UserSerializer()
+    # user = UserSerializer()
     class Meta:
         model = Patient
         fields = ('url', 'id', 'user', 'mobile', 'gender', 'has_subscription',
                   'joined_on', 'last_updated_on')
 
 class  ClinicSerializer(QueryFieldsMixin, serializers.ModelSerializer):
-    user = UserSerializer()
+    # user = UserSerializer()
     available_doctors = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     class Meta:
         model = Clinic
@@ -61,7 +61,10 @@ class  ClinicSerializer(QueryFieldsMixin, serializers.ModelSerializer):
                   'last_updated_on', 'available_doctors')
 
 class DoctorSerializer(QueryFieldsMixin, serializers.ModelSerializer):
-    user = UserSerializer()
+    # user = UserSerializer()
+    available_at = ClinicSerializer()
+    all_clinics = ClinicSerializer(many=True)
+
     class Meta:
         model = Doctor
         fields = ('url', 'id', 'user', 'available_at', 'all_clinics',
@@ -72,8 +75,9 @@ class AppointmentSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = ('url', 'id', 'booking_id', 'book_by', 'doctor', 'location',
-                  'status', 'created_on', 'last_updated_on',
+                  'status', 'created_on', 'last_updated_on', 'preferred_time',
                   'appointment_time')
+
 
 class DirectCarePlanSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     class Meta:

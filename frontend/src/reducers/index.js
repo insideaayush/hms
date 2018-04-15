@@ -3,11 +3,13 @@ import { routerReducer } from 'react-router-redux'
 import auth, * as fromAuth from './auth'
 import posts, * as fromPosts from './posts'
 import doctors, * as fromDoctors from './doctors'
+import appointments, * as fromAppointments from './appointments'
 
 export default combineReducers({
     auth: auth,
     posts: posts,
     doctors: doctors,
+    appointments: appointments,
     router: routerReducer,
 })
 
@@ -26,8 +28,17 @@ export const authErrors =
     state => fromAuth.errors(state.auth)
 export const getUser = 
     state => fromAuth.getUser(state.auth)
+export const getPatient = 
+    state => fromAuth.getPatient(state.auth)
+export const getDoctor = 
+    state => fromAuth.getDoctor(state.auth)
+export const getClinic = 
+    state => fromAuth.getClinic(state.auth)
 export const getUserId =
     state => fromAuth.getUserId(state.auth)
+
+export const appLoader = 
+    state => fromAppointments.loader(state.appointments)
 
 // Posts Helper Function
 export const getPostList = 
@@ -36,12 +47,26 @@ export const getPostList =
 export const isRetrievingPostList = 
     state => fromPosts.isRetrievingPostList(state.posts)
 
+
 // Doctors Helper Function
 export const allDoctors = 
     state => fromDoctors.allDoctors(state.doctors)
 
 export const isLoadingDoctorsList = 
     state => fromDoctors.isLoadingDoctorsList(state.doctors)
+
+// Doctors Helper Function
+export const allAppointments = 
+    state => fromAppointments.allAppointments(state.appointments)
+
+export const isRetrievingAppointmentsList = 
+    state => fromAppointments.isRetrievingAppointmentsList(state.appointments)
+
+export const snackbarOpen = 
+    state => fromAppointments.snackbarOpen(state.appointments)
+
+export const snackbarMessage = 
+    state => fromAppointments.snackbarMessage(state.appointments)
 
 export function withAuth(headers = {}) {
     return (state) => ({

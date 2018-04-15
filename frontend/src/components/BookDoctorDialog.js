@@ -5,15 +5,14 @@ import Dialog, {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    withMobileDialog
 } from 'material-ui/Dialog';
+import PropTypes from 'prop-types';
 import BookingSteps from './BookingSteps';
 import Grid from 'material-ui/Grid'
 import { withStyles } from 'material-ui/styles';
-import { InputLabel } from 'material-ui/Input';
-import { MenuItem } from 'material-ui/Menu';
-import { FormControl } from 'material-ui/Form';
-import Select from 'material-ui/Select';
-import DateTImePicker from './DateTImePicker'
+import DateTimePicker from './DateTimePicker'
+import ClinicPicker from './ClinicPicker'
 
 const styles = theme => ({
     root: {
@@ -21,7 +20,7 @@ const styles = theme => ({
         flexWrap: 'wrap',
     },
     formControl: {
-        margin: theme.spacing.unit,
+        // margin: theme.spacing.unit,
         minWidth: 120,
         width:"100%",
     },
@@ -30,127 +29,103 @@ const styles = theme => ({
     },
 });
 
-
-class PickClinic extends React.Component {
-    state = {
-        clinic: '',
-        name: 'hai',
-    };
-
-    handleChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
-    };
-
-    render(){
-        const {classes} = this.props
-        return (   
-            <Grid container spacing={24}>
-                <Grid item xs={12}>
-                    Pick a clinic
-                    <form className={classes.root} autoComplete="off">
-                        <FormControl className={classes.formControl}>
-                            <InputLabel htmlFor="clinic-simple">Clinic</InputLabel>
-                            <Select
-                                value={this.state.clinic}
-                                onChange={this.handleChange}
-                                inputProps={{
-                                    name: 'clinic',
-                                    id: 'clinic-simple',
-                                }}
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </form>
-                </Grid>
-                <Grid item xs={12}>
-                </Grid>
+const PickDateTime = (props) => {
+    return (
+        <Grid container spacing={24}>
+            <Grid item xs={12}>
+                Pick your preferred Date and Time for appointment
+                <DateTimePicker 
+                    selectedDate={props.selectedDate}
+                    handleDateChange={props.handleDateChange}
+            />
             </Grid>
-        )
-    }
-}
-
-class PickDateTime extends React.Component {
-    state = {
-        clinic: '',
-    };
-
-    handleChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
-    };
-
-    render() {
-        return (
-            <Grid container spacing={24}>
-                <Grid item xs={12}>
-                    Pick your preferred Date and Time for appointment
-                    <DateTImePicker />
-                </Grid>
-                <Grid item xs={12}>
-                </Grid>
+            <Grid item xs={12}>
             </Grid>
-        )
-    }
-}
-
-function getSteps() {
-    return ['Select a Clinic', 'Select your preferred date and time'];
-}
-
-function getStepContent(stepIndex, classes) {
-    switch (stepIndex) {
-        case 0:
-            return <PickClinic classes={classes} />
-        case 1:
-            return <PickDateTime classes={classes}/>
-        default:
-            return 'Uknown stepIndex';
-    }
+        </Grid>
+    )
 }
 
 class BookDoctorDialog extends React.Component {
-    render() {
-        const {classes} = this.props
-        return (
-            <div>
-                <Dialog
-                    open={this.props.open}
-                    onClose={this.props.handleClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">Book an appointment</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            You can book a doctor at his/her current available clinic or can select a different one from below.
-                            Selecting the current(default) clinic may get you a closer appointment time
-                        </DialogContentText>
-                        <BookingSteps
-                            activeStep={this.props.activeStep}
-                            handleNext={this.props.handleNext}
-                            handleBack={this.props.handleBack}
-                            handleReset={this.props.handleReset}
-                            getSteps={() => getSteps()}
-                            getStepContent={(idx) => getStepContent(idx, classes)}
+    constructor(props){
+        super(props)
+        this.getSteps = this.getSteps.bind(this)
+        this.getStepContent = this.getStepContent.bind(this)
+    }
+    
 
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.props.handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button disabled={(this.props.activeStep > 1) ? false : true } onClick={this.props.handleClose} color="primary">
-                            Book
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
+
+    getSteps() {
+        return ['Select a Clinic', 'Select your preferred date and time'];
+    }
+
+    getStepContent(stepIndex, classes) {
+        switch (stepIndex) {
+            case 0:
+                return (
+                    <ClinicPicker 
+                        clinic={this.props.clinic}
+                        handleChangeClinic={this.props.handleChangeClinic}
+                        all_clinics={this.props.currentRow.all_clinics}
+                        classes={classes} 
+                    />
+                )
+            case 1:
+                return (
+                    <PickDateTime 
+                        selectedDate={this.props.selectedDate}
+                        handleDateChange={this.props.handleDateChange}
+                    />
+                ) 
+            default:
+                return 'Uknown stepIndex';
+        }
+    }
+
+    render() {
+        const {classes, fullScreen} = this.props
+        return (
+            <Grid container spacing={24}>
+                <Grid item xs={12}>
+                    <Dialog
+                        fullScreen={fullScreen}
+                        open={this.props.open}
+                        onClose={this.props.handleClose}
+                        aria-labelledby="form-dialog-title"
+                        >
+                        <DialogTitle id="form-dialog-title">Book an appointment</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                You can book a doctor at his/her current available clinic or can select a different one from below.
+                                Selecting the current(default) clinic may get you a closer appointment time
+                            </DialogContentText>
+                            <BookingSteps
+                                currentRow={this.props.currentRow}
+                                activeStep={this.props.activeStep}
+                                handleNext={this.props.handleNext}
+                                handleBack={this.props.handleBack}
+                                handleReset={this.props.handleReset}
+                                getSteps={() => this.getSteps()}
+                                getStepContent={(idx) => this.getStepContent(idx, classes)}
+                                clinic={this.props.clinic}
+                                selectedDate={this.props.selectedDate}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.props.handleClose} color="primary">
+                                Cancel
+                            </Button>
+                            <Button disabled={(this.props.activeStep > 1) ? false : true } onClick={this.props.handleBook} color="primary">
+                                Book
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </Grid>
+            </Grid>
         );
     }
 }
+BookDoctorDialog.propTypes = {
+    fullScreen: PropTypes.bool.isRequired,
+};
 
-export default withStyles(styles)(BookDoctorDialog)
+export default withStyles(styles)(withMobileDialog()(BookDoctorDialog))
