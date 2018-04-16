@@ -24,7 +24,7 @@ class BookingSteps extends React.Component {
         const steps = this.props.getSteps();
         let clinicName = ""
         if(this.props.clinic !== "" && activeStep === steps.length){
-            clinicName = this.props.currentRow.all_clinics.filter((clinic) => clinic === this.props.clinic)[0]
+            clinicName = this.props.currentRow.all_clinics.filter((clinic) => clinic.id === this.props.clinic)[0].name
         }
         return (
             <div className={classes.root}>

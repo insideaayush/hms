@@ -171,6 +171,9 @@ class Patient(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
+    
+    def name(self):
+        return "%s %s" % (self.user.first_name, self.user.last_name)
 
     def save(self, *args, **kwargs):
         self.user.is_patient = True
@@ -188,6 +191,9 @@ class Clinic(models.Model):
         ordering = ('last_updated_on', )
 
     def __str__(self):
+        return "%s" % (self.user.first_name)
+    
+    def name(self):
         return "%s" % (self.user.first_name)
 
     def save(self, *args, **kwargs):
@@ -208,6 +214,9 @@ class Doctor(models.Model):
         ordering = ('last_updated_on', )
 
     def __str__(self):
+        return "%s %s" % (self.user.first_name, self.user.last_name)
+    
+    def name(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
 
     def display_all_clinics(self):

@@ -152,9 +152,9 @@ class AppointmentsTable extends React.Component {
                 return {
                     id: appointment.id,
                     booking_id: appointment.booking_id,
-                    book_by: appointment.book_by,
-                    doctor: appointment.doctor,
-                    clinic: appointment.location,
+                    book_by: appointment.book_by.name,
+                    doctor: appointment.doctor.name,
+                    clinic: appointment.location.name,
                     status: getStatus(appointment.status),
                     booked_on: getParsedDateTime(appointment.created_on),
                     preferred_time: (appointment.preferred_time) ? getParsedDateTime(appointment.preferred_time) : "NOT SET",

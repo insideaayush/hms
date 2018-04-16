@@ -26,7 +26,7 @@ export const setDefaultClinic = (doctor_id, clinic_id) => ({
     [RSAA]: {
         endpoint: '/api/v1/doctors/' + doctor_id + "/",
         method: 'PATCH',
-        body: JSON.stringify({ available_at: (clinic_id) ?  clinic_id : null}),
+        body: JSON.stringify({ available_at: (clinic_id) ?  { id: clinic_id} : null}),
         headers: withAuth({ 'Content-Type': 'application/json' }),
         types: [
             SET_DEFAULT_CLINIC_REQUEST, SET_DEFAULT_CLINIC_SUCCESS, SET_DEFAULT_CLINIC_FAILURE

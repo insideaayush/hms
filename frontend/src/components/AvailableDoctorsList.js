@@ -12,14 +12,14 @@ const AvailableDoctorsList = (props) => {
                     <List>
                         {props.available_doctors.map(value => (
                             <ListItem
-                                key={value}
+                                key={value.id}
                                 role={undefined}
                                 dense
                                 button
                             >
-                                <ListItemText primary={value} />
+                                <ListItemText primary={value.name} />
                                 <ListItemSecondaryAction>
-                                    <Button mini color="secondary" onClick={() => props.setUnavailable(value)}>
+                                    <Button mini color="secondary" onClick={() => props.setUnavailable(value.id)}>
                                         Set Unavailable
                                     </Button>
                                 </ListItemSecondaryAction>

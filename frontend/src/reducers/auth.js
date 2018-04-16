@@ -68,7 +68,7 @@ export default (state = initialState, action) => {
                 patient: {...action.payload[0]}
             }
         case doctors.SET_UNAVAILABLE_SUCCESS:
-            let updated_clinic = { ...state.clinic, available_doctors: state.clinic.available_doctors.filter((id) => id !== action.payload.id)}
+            let updated_clinic = { ...state.clinic, available_doctors: state.clinic.available_doctors.filter((doctor) => doctor.id !== action.payload.id)}
             return {
                 ...state,
                 clinic: {...updated_clinic}

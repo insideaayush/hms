@@ -44,45 +44,75 @@ class PostSerializer(QueryFieldsMixin, serializers.ModelSerializer):
             'publish_on'
         )
 """
-
-class PatientSerializer(QueryFieldsMixin, serializers.ModelSerializer):
-    # user = UserSerializer()
+class PatientShortSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Patient
-        fields = ('url', 'id', 'user', 'mobile', 'gender', 'has_subscription',
+        fields= ('url', 'id', 'name')
+
+class ClinicShortSerializer(QueryFieldsMixin, serializers.ModelSerializer):
+    class Meta:
+        model = Clinic
+        fields= ('url', 'id', 'name')
+
+class DoctorShortSerializer(QueryFieldsMixin, serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
+        fields= ('url', 'id', 'name')
+
+class PatientSerializer(QueryFieldsMixin, serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = ('url', 'id', 'name', 'user', 'mobile', 'gender', 'has_subscription',
                   'joined_on', 'last_updated_on')
 
 class  ClinicSerializer(QueryFieldsMixin, serializers.ModelSerializer):
-    # user = UserSerializer()
-    available_doctors = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    # available_doctors = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    available_doctors = DoctorShortSerializer(many=True)
+
     class Meta:
         model = Clinic
-        fields = ('url', 'id', 'user', 'address', 'joined_on',
+        fields = ('url', 'id', 'name', 'user', 'address', 'joined_on',
                   'last_updated_on', 'available_doctors')
 
 class DoctorSerializer(QueryFieldsMixin, serializers.ModelSerializer):
+    available_at = ClinicShortSerializer(allow_null=True)
+    all_clinics = ClinicShortSerializer(many=True)
     user = UserSerializer()
-    # available_at = ClinicSerializer()
-    # all_clinics = ClinicSerializer(many=True)
 
     class Meta:
         model = Doctor
-        fields = ('url', 'id', 'user', 'available_at', 'all_clinics',
+        fields = ('url', 'id', 'name', 'user', 'available_at', 'all_clinics',
                   'specialization', 'description', 'joined_on',
                   'last_updated_on')
+
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
         try:
             user_object = User.objects.create(**user_data)
         except:
-            raise serializers.ValidationError("User with provided isInvalid")
+            raise serializers.ValidationError("User with provided info isInvalid")
         else:
             pass
 
         doctor = Doctor.objects.create(user=user_object, **validated_data)
         return doctor
-        
+
+    def update(self, instance, validated_data):
+        if self.context['request'].data['available_at'] is not None:
+            try:
+                available_at_obj = Clinic.objects.get(pk=self.context['request'].data['available_at']['id'])
+            except:
+                raise serializers.ValidationError("Clinic with provided id is Invalid")
+            else:
+                instance.available_at = available_at_obj
+                instance.save()
+        else:
+            instance.available_at = None
+            instance.save()
+
+        return instance
+
     # def create(self, validated_data):
     #     user_data = validated_data.pop('user')
     #     available_at_data = validated_data.pop('available_at')
@@ -198,11 +228,53 @@ class DoctorSerializer(QueryFieldsMixin, serializers.ModelSerializer):
 
 
 class AppointmentSerializer(QueryFieldsMixin, serializers.ModelSerializer):
+    book_by = PatientShortSerializer()
+    doctor = DoctorShortSerializer()
+    location = ClinicShortSerializer()
+
     class Meta:
         model = Appointment
         fields = ('url', 'id', 'booking_id', 'book_by', 'doctor', 'location',
                   'status', 'created_on', 'last_updated_on', 'preferred_time',
                   'appointment_time')
+
+    def create(self, validated_data):
+        book_by_data = validated_data.pop('book_by')
+        doctor_data = validated_data.pop('doctor')
+        location_data = validated_data.pop('location')
+
+        book_by_id = self.context['request'].data['book_by']['id']
+        doctor_id = self.context['request'].data['doctor']['id']
+        location_id = self.context['request'].data['location']['id']
+        try:
+            book_by_obj = Patient.objects.get(pk=book_by_id)
+        except:
+            raise serializers.ValidationError(
+                "Patient with provided id does not exist!"
+            )
+        else:
+            pass
+
+        try:
+            doctor_obj = Doctor.objects.get(pk=doctor_id)
+        except:
+            raise serializers.ValidationError(
+                "Doctor with provided id does not exist!"
+            )
+        else:
+            pass
+
+        try:
+            location_obj = Clinic.objects.get(pk=location_id)
+        except:
+            raise serializers.ValidationError(
+                "Clinic with provided id does not exist!"
+            )
+        else:
+            pass
+
+        appointment = Appointment.objects.create(book_by=book_by_obj, doctor=doctor_obj, location=location_obj,**validated_data)
+        return appointment
 
 
 class DirectCarePlanSerializer(QueryFieldsMixin, serializers.ModelSerializer):

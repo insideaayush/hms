@@ -25,14 +25,13 @@ const styles = theme => ({
 class ClinicView extends React.Component {
     render() {
         let welcomeMessage = ""
-        if (this.props.user) {
-            welcomeMessage = "Hello " + this.props.user.first_name
+        if (this.props.clinic) {
+            welcomeMessage = "Hello " + this.props.clinic.name
         }
         else {
             welcomeMessage = "Hello"
         }
         const { classes } = this.props
-        console.log(this.props.clinic)
         return (
             <div>
                 <Jumbotron className={classes.welcomeBanner}>
@@ -62,8 +61,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    setUnavailable: (doctor_id, clinic_id) => {
-        dispatch(setUnavailable(doctor_id, clinic_id))
+    setUnavailable: (doctor_id) => {
+        dispatch(setUnavailable(doctor_id))
     }
 })
 

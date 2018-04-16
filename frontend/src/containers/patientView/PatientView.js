@@ -73,10 +73,18 @@ class PatientView extends React.Component {
     }
 
     handleBook(){
+        console.log(this.props)
+        console.log(this.state)
         let data = {
-            "book_by": this.props.patient.id,
-            "doctor": this.state.currentRow.doctor_id,
-            "location": this.state.clinic,
+            "book_by": {
+                id: this.props.patient.id
+            },
+            "doctor": { 
+                id:this.state.currentRow.doctor_id,
+            },
+            "location": {
+                id: this.state.clinic,
+            },
             "preferred_time": this.state.selectedDate,
         }
 

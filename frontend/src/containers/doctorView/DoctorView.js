@@ -40,8 +40,8 @@ class DoctorView extends React.Component {
 
     render() {
         let welcomeMessage = ""
-        if(this.props.user){
-            welcomeMessage =  "Hello Dr, " + this.props.user.first_name + " " + this.props.user.last_name
+        if(this.props.doctor){
+            welcomeMessage =  "Hello Dr, " + this.props.doctor.name
         }
         else {
             welcomeMessage =  "Hello"
@@ -70,7 +70,7 @@ class DoctorView extends React.Component {
                                     <HealingIcon />
                                 </Avatar>
                             }
-                            label={((this.props.doctor) ? ((this.props.doctor.available_at) ? (this.props.doctor.available_at) : "Not Available") : "")}
+                            label={((this.props.doctor) ? ((this.props.doctor.available_at) ? (this.props.doctor.available_at.name) : "Not Available") : "")}
                             className={classes.chip}
                         />
                     </Grid>
