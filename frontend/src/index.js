@@ -19,7 +19,7 @@ import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsPr
 
 // Apps
 import App from './App'
-import Login from './containers/Login';
+import LandingPage from './containers/LandingPage';
 
 const history = createHistory()
 const store = configureStore(history)
@@ -29,7 +29,9 @@ ReactDOM.render((
         <Provider store={store}>
             <ConnectedRouter history={history}>
                 <Switch>
-                    <Route exact path="/login/" component={Login} />
+                    <Route exact path="/login" component={LandingPage} />
+                    <Route exact path="/signup" component={LandingPage} />
+                    <PrivateRoute path="/appointments/" component={App}/>
                     <PrivateRoute path="/" component={App}/>
                     <PrivateRoute component={App}/>
                 </Switch>

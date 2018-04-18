@@ -60,10 +60,26 @@ class DoctorShortSerializer(QueryFieldsMixin, serializers.ModelSerializer):
         fields= ('url', 'id', 'name')
 
 class PatientSerializer(QueryFieldsMixin, serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Patient
         fields = ('url', 'id', 'name', 'user', 'mobile', 'gender', 'has_subscription',
                   'joined_on', 'last_updated_on')
+
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+
+        try:
+            user_object = User.objects.create(**user_data)
+        except:
+            raise serializers.ValidationError("User with provided info is Invalid")
+        else:
+            pass
+
+        patient = Patient.objects.create(user=user_object, **validated_data)
+        return patient
+
+
 
 class  ClinicSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     # available_doctors = serializers.PrimaryKeyRelatedField(read_only=True, many=True)

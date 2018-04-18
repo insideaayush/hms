@@ -6,7 +6,7 @@ SECRET_KEY = 'b8&k!skhmvvm@^7h%cj^0snc!av5*w6rr!f#d@^(@cpj#q)1l8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','746cbd34.ngrok.io']
+ALLOWED_HOSTS = ['10.194.14.9','localhost','746cbd34.ngrok.io']
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

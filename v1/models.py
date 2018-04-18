@@ -171,12 +171,13 @@ class Patient(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
-    
+
     def name(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
 
     def save(self, *args, **kwargs):
         self.user.is_patient = True
+        self.user.has_subscription = True
         self.user.save()
         super(Patient, self).save(*args, **kwargs)
 
@@ -192,7 +193,7 @@ class Clinic(models.Model):
 
     def __str__(self):
         return "%s" % (self.user.first_name)
-    
+
     def name(self):
         return "%s" % (self.user.first_name)
 
@@ -215,7 +216,7 @@ class Doctor(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
-    
+
     def name(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
 

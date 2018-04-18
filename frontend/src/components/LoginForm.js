@@ -1,9 +1,26 @@
 import React, { Component } from 'react'
-import { Alert, Button, Form } from 'reactstrap';
+import { Alert, Form } from 'reactstrap';
+import {withStyles} from 'material-ui/styles';
+import Grid from 'material-ui/Grid';
+import TextField from 'material-ui/TextField';
+import Button from 'material-ui/Button';
 
-import TextInput from './TextInput'
+const styles = theme => ({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+    },
+    loginButton:{
+        float: "right",
+        borderRadius: 50,
+    }
+})
 
-export default class LoginForm extends Component {
+class LoginForm extends Component {
     state = {
         username: '',
         password: ''
@@ -20,24 +37,55 @@ export default class LoginForm extends Component {
         });
     }
 
-    componentDidMount() {
-        this.primaryInput.focus();
-    }
-
     onSubmit = (event) => {
         event.preventDefault()
         this.props.onSubmit(this.state.username, this.state.password)
     }
 
     render() {
+        const {classes} = this.props
         const errors = this.props.errors || {}
         return (
-            <Form onSubmit={this.onSubmit}>
-                {errors.non_field_errors ? <Alert color="danger">{errors.non_field_errors}</Alert> : ""}
-                <TextInput name="username" id_suffix={this.props.type} label="Username" error={errors.username} getRef={input => this.primaryInput = input} onChange={this.handleInputChange} />
-                <TextInput name="password" id_suffix={this.props.type} label="Password" error={errors.password} type="password" onChange={this.handleInputChange} />
-                <Button type="submit" color="primary" size="lg">Log In</Button>
-            </Form>
+            <div>
+                <Form onSubmit={this.onSubmit}>
+                    <Grid container spacing={24}>
+                        {errors.non_field_errors ? <Grid item xs={12}> <Alert color="danger">{errors.non_field_errors}</Alert> </Grid>: null}
+                        <Grid item xs={12}>
+                            <TextField
+                                autoFocus
+                                id="username-input"
+                                label="Username"
+                                name="username"
+                                placeholder="username"
+                                fullWidth
+                                onChange={this.handleInputChange}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={24}>
+                        <Grid item xs={12}>
+                            <TextField
+                                id="password-input"
+                                label="Password"
+                                name="password"
+                                placeholder="password"
+                                type="password"
+                                fullWidth
+                                onChange={this.handleInputChange}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={24}>                            
+                        <Grid item xs={12}>
+                            <Button type="submit" className={classes.loginButton} variant="raised" color="primary">
+                                Login
+                            </Button>
+                        </Grid>                
+                    </Grid>
+                </Form>
+            </div>
         )
     }
 }
+
+export default withStyles(styles)(LoginForm)

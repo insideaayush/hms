@@ -73,8 +73,6 @@ class PatientView extends React.Component {
     }
 
     handleBook(){
-        console.log(this.props)
-        console.log(this.state)
         let data = {
             "book_by": {
                 id: this.props.patient.id

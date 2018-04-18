@@ -21,6 +21,9 @@ export const LOGGED_IN_DOCTOR_FAILURE = '@@auth/LOGGED_IN_DOCTOR_FAILURE'
 export const LOGGED_IN_CLINIC_REQUEST = '@@auth/LOGGED_IN_CLINIC_REQUEST'
 export const LOGGED_IN_CLINIC_RECEIVED = '@@auth/LOGGED_IN_CLINIC_RECEIVED'
 export const LOGGED_IN_CLINIC_FAILURE = '@@auth/LOGGED_IN_CLINIC_FAILURE'
+export const SIGN_UP_REQUEST = '@@auth/SIGN_UP_REQUEST'
+export const SIGN_UP_SUCCESS = '@@auth/SIGN_UP_SUCCESS'
+export const SIGN_UP_FAILURE = '@@auth/SIGN_UP_FAILURE'
 
 
 export const login = (username, password) => ({
@@ -65,6 +68,18 @@ export const loginDoctor = (username, password) => ({
         headers: { 'Content-Type': 'application/json' },
         types: [
             LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE
+        ]
+    }
+})
+
+export const signupPatient = (data) => ({
+    [RSAA]: {
+        endpoint: '/api/create',
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        types: [
+            SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE
         ]
     }
 })

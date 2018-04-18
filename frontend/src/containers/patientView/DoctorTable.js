@@ -25,7 +25,6 @@ import { TableRow, TableCell } from 'material-ui/Table'
 import { CircularProgress } from 'material-ui/Progress'
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
-import {getClinicFullName} from '../../constants'
 
 const styles = theme => ({
     paper: {

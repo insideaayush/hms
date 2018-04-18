@@ -23,6 +23,13 @@ class Home extends React.Component{
                 this.props.getLoggedInClinic(this.props.user.id)
                 home = <ClinicView/>
             }
+            else {
+                home = (
+                    <div>
+                        You have invalid permissions
+                    </div>
+                ) 
+            }
 
         }
         return (
