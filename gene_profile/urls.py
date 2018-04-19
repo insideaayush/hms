@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
+# sign up process for patient
+from v1.views import CreatePatient
 
 # Api Auth
 from django.views import generic
@@ -27,6 +29,7 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     # path('', generic.RedirectView.as_view(
     #      url='/api/', permanent=False)),
+    path('create/', CreatePatient.as_view(), name="create"),
     path('api/', get_schema_view()),
     path('api/v1/', include('v1.urls')),
     path('api_auth/', include(

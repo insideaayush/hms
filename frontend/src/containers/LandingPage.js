@@ -4,8 +4,8 @@ import { Redirect, Route } from 'react-router'
 import { Link } from 'react-router-dom'
 
 // Action and Reducers
-import { loginPatient, loginClinic, loginDoctor, signupPatient } from '../actions/auth'
-import { authErrors, isAuthenticated } from '../reducers'
+import { loginPatient, loginClinic, loginDoctor, signupPatient, closeAuthDialog } from '../actions/auth'
+import { authErrors, isAuthenticated, authMessage, openAuthDialog } from '../reducers'
 
 // UI imports
 import {withStyles} from "material-ui/styles"
@@ -16,6 +16,7 @@ import { Jumbotron, Container, Row, Col, Navbar, NavbarBrand } from 'reactstrap'
 // Components
 import LoginForm from '../components/LoginForm'
 import SignupForm from '../components/SignupForm'
+import SignUpAlertDialog from '../components/SignUpAlertDialog' 
 
 // Other
 import login_banner from "../images/login-banner.jpg"
@@ -69,66 +70,67 @@ const styles = (theme) => ({
     }
 })
 
-const LoginContainer = (props) => {
-    const {classes} = props
-    return (
-        <div>
-            <Container>
-                <Jumbotron fluid className={classes.loginContainer}>
-                    <div className={classes.loginBannerContainer}>
-                        <div>
-                            <img alt="login" src={login_graphics} />
-                        </div>
-                    </div>
-                    <LoginForm errors={props.errors} onSubmit={props.onSubmitPatient} />
-                </Jumbotron>
-            </Container>
-        </div>
-    )
-}
-
-const SignupContainer = (props) => {
-    const {classes} = props
-    return (
-        <div>
-            <Container>
-                <Jumbotron fluid className={classes.loginContainer}>
-                    <div className={classes.loginBannerContainer}>
-                        <div>
-                            <img alt="login" src={signup_graphics} />
-                        </div>
-                    </div>
-                    <SignupForm errors={props.errors} onSubmit={props.signupPatient} />
-                </Jumbotron>
-            </Container>
-        </div>
-    )
-}
-
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.toggle = this.toggle.bind(this);
-        this.handleSignUp = this.handleSignUp.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this)
         this.state = {
-            activeTab: '1',
+            open: false,
         };
     }
 
-    toggle(tab) {
-        if (this.state.activeTab !== tab) {
-            this.setState({
-                activeTab: tab
-            });
-        }
+    componentDidMount(){
+        console.log("hello")
     }
 
-    handleSignUp(){
-    }
+    handleCloseDialog = () => {
+        this.props.closeAuthDialog()
+    };
 
     render(){
         const {classes} = this.props
+        
+        const LoginContainer = (props) => {
+            const { classes } = props
+            return (
+                <div>
+                    <Container>
+                        <Jumbotron fluid className={classes.loginContainer}>
+                            <div className={classes.loginBannerContainer}>
+                                <div>
+                                    <img alt="login" src={login_graphics} />
+                                </div>
+                            </div>
+                            <LoginForm errors={props.errors} onSubmit={props.onSubmitPatient} />
+                        </Jumbotron>
+                    </Container>
+                </div>
+            )
+        }
 
+        const SignupContainer = (props) => {
+            const { classes } = props
+            return (
+                <div>
+                    <Container>
+                        <Jumbotron fluid className={classes.loginContainer}>
+                            <SignUpAlertDialog
+                                open={this.props.openAuthDialog}
+                                handleClose={this.handleCloseDialog}
+                                authMessage={this.props.authMessage}
+                            />
+                            <div className={classes.loginBannerContainer}>
+                                <div>
+                                    <img alt="login" src={signup_graphics} />
+                                </div>
+                            </div>
+                            <SignupForm errors={props.errors} onSubmit={props.signupPatient} />
+                        </Jumbotron>
+                    </Container>
+                </div>
+            )
+        }
+        
         const routes = [
             {
                 path: "/login/",
@@ -196,7 +198,9 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => ({
     errors: authErrors(state),
-    isAuthenticated: isAuthenticated(state)
+    authMessage: authMessage(state),
+    isAuthenticated: isAuthenticated(state),
+    openAuthDialog: openAuthDialog(state),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -211,6 +215,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     signupPatient: (data) => {
         dispatch(signupPatient(data))
+    },
+    closeAuthDialog: () => {
+        dispatch(closeAuthDialog())
     }
 })
 

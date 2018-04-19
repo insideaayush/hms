@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Alert, Form } from 'reactstrap';
+import { Form } from 'reactstrap';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import TextField from 'material-ui/TextField';
@@ -92,12 +92,10 @@ class SignupForm extends Component {
 
     render() {
         const { classes } = this.props
-        const errors = this.props.errors || {}
         return (
             <div>
                 <Form onSubmit={this.onSubmit}>
                     <Grid container spacing={24}>
-                        {errors.non_field_errors ? <Grid item xs={12}> <Alert color="danger">{errors.non_field_errors}</Alert> </Grid> : null}
                         <Grid item xs={12}>
                             <TextField
                                 autoFocus

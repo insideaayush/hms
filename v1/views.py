@@ -1,8 +1,13 @@
 from .models import *
-from rest_framework import viewsets
-from rest_framework.decorators import api_view
 from v1.serializers import *
 from django_filters.rest_framework import DjangoFilterBackend
+from django.utils.six import BytesIO
+from rest_framework import authentication, permissions, viewsets, status
+from rest_framework.decorators import api_view
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 
 @api_view(['GET'])
 def api_root(request, format=None):
@@ -88,3 +93,23 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
+
+class CreatePatient(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request, format=None):
+        """
+        Create a a new Patient
+        """
+        data = request.data
+        user_data = data['user']
+        password_data = user_data['password']
+        serializer = PatientSerializer(
+            context={
+                'request': request,
+                'password': password_data
+            }, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -24,6 +24,7 @@ export const LOGGED_IN_CLINIC_FAILURE = '@@auth/LOGGED_IN_CLINIC_FAILURE'
 export const SIGN_UP_REQUEST = '@@auth/SIGN_UP_REQUEST'
 export const SIGN_UP_SUCCESS = '@@auth/SIGN_UP_SUCCESS'
 export const SIGN_UP_FAILURE = '@@auth/SIGN_UP_FAILURE'
+export const CLOSE_SIGN_UP_DIALOG = '@@auth/CLOSE_SIGN_UP_DIALOG'
 
 
 export const login = (username, password) => ({
@@ -71,13 +72,12 @@ export const loginDoctor = (username, password) => ({
         ]
     }
 })
-
 export const signupPatient = (data) => ({
     [RSAA]: {
-        endpoint: '/api/create',
+        endpoint: '/create/',
         method: 'POST',
         body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', },
         types: [
             SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE
         ]
@@ -138,6 +138,12 @@ export const getLoggedInClinic = (id) => ({
         ]
     }
 })
+
+export const closeAuthDialog = () => {
+    return {
+        type: CLOSE_SIGN_UP_DIALOG
+    }
+}
 
 
 

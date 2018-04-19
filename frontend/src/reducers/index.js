@@ -36,6 +36,10 @@ export const getClinic =
     state => fromAuth.getClinic(state.auth)
 export const getUserId =
     state => fromAuth.getUserId(state.auth)
+export const authMessage =
+    state => fromAuth.authMessage(state.auth)
+export const openAuthDialog =
+    state => fromAuth.openAuthDialog(state.auth)
 
 export const appLoader = 
     state => fromAppointments.loader(state.appointments)

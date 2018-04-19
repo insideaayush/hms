@@ -68,13 +68,14 @@ class PatientSerializer(QueryFieldsMixin, serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-
+        password_data = self.context.get("password")
         try:
             user_object = User.objects.create(**user_data)
         except:
             raise serializers.ValidationError("User with provided info is Invalid")
         else:
-            pass
+            user_object.set_password(raw_password=password_data)
+            user_object.save()
 
         patient = Patient.objects.create(user=user_object, **validated_data)
         return patient

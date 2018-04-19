@@ -11,6 +11,8 @@ const initialState = {
     clinic: undefined,
     doctor: undefined,
     patient: undefined,
+    authMessage: '',
+    open_signupDialog: false,
 }
 
 export default (state = initialState, action) => {
@@ -84,10 +86,35 @@ export default (state = initialState, action) => {
                 ...state,
                 doctor: {...action.payload[0]}
             }
-        
+        case auth.SIGN_UP_SUCCESS:
+            return {
+                ...state,
+                open_signupDialog: true,
+                authMessage: "Your account was created successfully, you can now login with your login username and password"
+            }
+        case auth.SIGN_UP_FAILURE:
+            return {
+                ...state,
+                open_signupDialog: true,
+                authMessage: "Your account creation was failed, try again!"
+            }
+        case auth.CLOSE_SIGN_UP_DIALOG:
+            return {
+                ...state,
+                open_signupDialog: false,
+                authMessage: "",
+            }
         default:
             return state
     }
+}
+
+export function authMessage(state){
+    return state.authMessage
+}
+
+export function openAuthDialog(state){
+    return state.open_signupDialog
 }
 
 export function accessToken(state) {
