@@ -11,7 +11,8 @@ import { authErrors, isAuthenticated, authMessage, openAuthDialog } from '../red
 import {withStyles} from "material-ui/styles"
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import { Jumbotron, Container, Row, Col, Navbar, NavbarBrand } from 'reactstrap'
+import Grid from 'material-ui/Grid';
+import { Jumbotron, Container, Navbar, NavbarBrand } from 'reactstrap'
 
 // Components
 import LoginForm from '../components/LoginForm'
@@ -172,15 +173,15 @@ class Login extends React.Component {
                         </div>
                     </div>
                 </Navbar>
-                <Row>
-                    <Col xs={12} md={6} className={classes.sideBanner}>
+                <Grid container>
+                    <Grid item xs={12} md={6} className={classes.sideBanner}>
                         <Container fluid className={classes.bannerTextContainer}>
                             <Jumbotron className={classes.bannerTextJumbotron}>
                                 <Typography variant="display2"> <strong>Carebox</strong> brings subscription based healthcare to your fingertips</Typography>
                             </Jumbotron>
                         </Container>
-                    </Col>
-                    <Col xs={12} md={6} className={classes.rightJumbo}>
+                    </Grid>
+                    <Grid item xs={12} md={6} className={classes.rightJumbo}>
                         {routes.map((route, index) => (
                             <Route
                                 key={index}
@@ -189,8 +190,8 @@ class Login extends React.Component {
                                 component={route.main}
                             />
                         ))}
-                    </Col>
-                </Row>
+                    </Grid>
+                </Grid>
             </div>
         )
     }
