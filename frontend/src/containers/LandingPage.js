@@ -173,7 +173,7 @@ class Login extends React.Component {
                     <Grid item xs={12} md={6} className={classes.sideBanner}>
                         <Container fluid className={classes.bannerTextContainer}>
                             <Jumbotron className={classes.bannerTextJumbotron}>
-                                <Typography variant="display2"> <strong>Eazecare</strong> brings revolutionaly clinic pass to your devices</Typography>
+                                <Typography variant="display2"> Better care, just a click away</Typography>
                             </Jumbotron>
                         </Container>
                     </Grid>
