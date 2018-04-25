@@ -111,7 +111,7 @@ class App extends React.Component {
                 <div className={classes.drawerHeader}>
                     <Toolbar>
                         <Typography variant="title" color="inherit" noWrap>
-                            Carebox
+                            Eazecare
                         </Typography>
                     </Toolbar>
                 </div>

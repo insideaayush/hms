@@ -80,10 +80,6 @@ class Login extends React.Component {
         };
     }
 
-    componentDidMount(){
-        console.log("hello")
-    }
-
     handleCloseDialog = () => {
         this.props.closeAuthDialog()
     };
@@ -154,7 +150,7 @@ class Login extends React.Component {
             <div>
                 <Navbar fixed="top"  light className={classes.navbar}>
                     <NavbarBrand href="/" className="mr-auto">
-                        <Typography variant="title"> <strong>Carebox</strong></Typography>
+                        <Typography variant="title"> <strong>Eazecare</strong></Typography>
                     </NavbarBrand>
                     <div className={classes.actions}>
                         <div className={classes.actionButtons}>
@@ -177,7 +173,7 @@ class Login extends React.Component {
                     <Grid item xs={12} md={6} className={classes.sideBanner}>
                         <Container fluid className={classes.bannerTextContainer}>
                             <Jumbotron className={classes.bannerTextJumbotron}>
-                                <Typography variant="display2"> <strong>Carebox</strong> brings subscription based healthcare to your fingertips</Typography>
+                                <Typography variant="display2"> <strong>Eazecare</strong> brings revolutionaly clinic pass to your devices</Typography>
                             </Jumbotron>
                         </Container>
                     </Grid>
