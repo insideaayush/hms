@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 	Python3
 	node
 
-For mac use home brew: 
+For mac use homebrew and run this command in terminal: 
 
 	brew update 
 	brew install python3 
@@ -54,6 +54,7 @@ Now install react stuff
     cd ../
 
 To run the project
+
     [tab1 of terminal]
     python3 manage.py runserver
 
