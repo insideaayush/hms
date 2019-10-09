@@ -44,8 +44,8 @@ STATICFILES_STORAGE = 'gene_profile.config.S3utils.StaticStorage'
 
 AWS_STORAGE_BUCKET_NAME = 'gene-profile-s3'
 AWS_S3_REGION_NAME = 'ap-south-1'  # e.g. us-east-2
-AWS_ACCESS_KEY_ID = 'AKIAI67OXV2AQPCIFLTQ'
-AWS_SECRET_ACCESS_KEY = 'lglcPhbK9sl0n3BKSZqB3Kh5kPRabqXfe5j6NvjA'
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
 
 AWS_S3_OBJECT_PARAMETERS = {
     'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
