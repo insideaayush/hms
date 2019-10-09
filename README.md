@@ -1,10 +1,10 @@
-#EAZECARE README
-This is the private code of Eazecare and cannot be shared. This document is currently under construction.
+## HMS
+A simple Hospital Management System.
 
-#Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+## Getting Started
+These instructions will help you setup development environment.
 
-#Prerequisites
+### Prerequisites
 	
 	pip3
 	virtualenv
@@ -19,24 +19,24 @@ For mac use homebrew and run this command in terminal:
 	mkdir ~/.virtualenvs 
 	brew install node
 
-#Installing
+#### Installing
 Now let us get the code up and running in the development environment.
 
 First clone the repo in your work folder.
 
-	git clone https://AayushGautam@bitbucket.org/AayushGautam/eazecare-client.git
+	git clone [clone_url]
 
 Now create a virtual env for eazecare 
 
 	mkdir ~/.virtualenvs 
 	cd ~/.virtualenvs 
-	mkdir eazecare_env 
-	cd eazecare_env 
+	mkdir hms_env 
+	cd hms_env 
 	virtualenv . 
 
 Then activate it 
 
-	source ~/.virtualenv/eazecare_env/bin/activate 
+	source ~/.virtualenv/hms_env/bin/activate 
 
 Now install all the dependencies of the project in this env 
 	
@@ -46,19 +46,16 @@ Now install all the dependencies of the project in this env
 Now we need to get the right branch pulled from the repository online 
 	git checkout --track origin/develop
 
-Now install react stuff
+Now install dependencies for frontend
     cd frontend/
     npm install
 
-    #to go back to projects root folder
-    cd ../
-
 To run the project
 
-    [tab1 of terminal]
+    to run the backend server
     python3 manage.py runserver
 
-    [tab2 of terminal]
+    to run the frontend server
     cd frontend/
     npm run start
 
